@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_retailer_profile_and_coupon"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin_low"
+    android:paddingLeft="@dimen/activity_horizontal_margin_low"
+    android:paddingRight="@dimen/activity_horizontal_margin_low"
+    android:paddingTop="@dimen/activity_vertical_margin_low"
+    tools:context="sourabh.ichiapp.activities.RetailerProfileAndCouponActivity"
+    android:background="@color/list_divider"
+
+    >
+
+
+    <!-- Thumbnail Image -->
+    <ImageView
+        android:id="@+id/banner"
+        android:layout_width="@dimen/banner_width"
+        android:layout_height="@dimen/banner_height"
+        android:layout_alignParentLeft="true"
+
+        />
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/list_row_selector"
+        android:id="@+id/list_layout"
+        android:layout_below="@+id/banner"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        >
+
+
+
+
+
+        <!-- Thumbnail Image -->
+        <com.android.volley.toolbox.NetworkImageView
+            android:id="@+id/thumbnail"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginRight="8dp" />
+
+        <!-- Movie Title -->
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/thumbnail"
+            android:layout_toRightOf="@+id/thumbnail"
+            android:textSize="@dimen/title"
+            android:textStyle="bold"
+            android:text="Name" />
+
+        <!-- Rating -->
+
+        <!-- Genre -->
+
+
+        <!-- Release Year -->
+        <TextView
+            android:id="@+id/releaseYear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/year"
+            android:textSize="@dimen/year" />
+
+        <ImageView
+            android:id="@+id/phoneImage"
+            android:background="@drawable/ic_local_phone_black_24dp"
+            android:layout_width="20dp"
+
+            android:layout_alignBottom="@+id/phone"
+            android:layout_toRightOf="@+id/thumbnail"
+            android:layout_toEndOf="@+id/thumbnail"
+            android:layout_height="20dp"
+            android:alpha="0.5" />
+
+        <TextView
+            android:id="@+id/address"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/rating"
+            android:text="Address"
+            android:layout_marginTop="10dp"
+
+            android:layout_below="@+id/name"
+            android:layout_toRightOf="@+id/addressImage"
+            android:layout_toEndOf="@+id/addressImage" />
+
+        <TextView
+            android:id="@+id/phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:autoLink="phone"
+
+            android:textColor="@color/genre"
+            android:textSize="@dimen/genre"
+            android:text="8888888888"
+            android:layout_below="@+id/address"
+            android:layout_toRightOf="@+id/phoneImage"
+            android:layout_toEndOf="@+id/phoneImage" />
+
+        <ImageView
+            android:id="@+id/addressImage"
+            android:scaleType="fitXY"
+            android:src="@drawable/ic_place_black_24dp"
+            android:background="@drawable/ic_place_black_24dp"
+            android:layout_marginTop="10dp"
+
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_below="@+id/name"
+            android:layout_toRightOf="@+id/thumbnail"
+            android:layout_toEndOf="@+id/thumbnail"
+            android:alpha="0.5" />
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/rating"
+            android:text="Description"
+            android:layout_marginTop="5dp"
+
+            android:layout_below="@+id/thumbnail"
+            android:layout_toRightOf="@+id/phoneImage"
+            android:layout_toEndOf="@+id/phoneImage" />
+
+        <ImageView
+            android:id="@+id/imageViewDescIcon"
+            android:background="@android:drawable/ic_menu_agenda"
+            android:layout_width="20dp"
+            android:layout_marginTop="5dp"
+
+            android:layout_height="20dp"
+            android:alpha="0.5"
+            android:layout_alignTop="@+id/description"
+            android:layout_toLeftOf="@+id/description"
+            android:layout_toStartOf="@+id/description" />
+
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/image_coupon"
+        android:layout_width="@dimen/banner_width"
+        android:layout_height="@dimen/banner_height"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/list_layout"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        />
+
+
+
+</RelativeLayout>
+
+
+
+</ScrollView>
