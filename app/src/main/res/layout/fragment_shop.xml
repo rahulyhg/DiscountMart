@@ -6,6 +6,6 @@
 
 
 
-    <include layout="@layout/gridview" ></include>
+    <include layout="@layout/gridview_slider" ></include>
 
 </RelativeLayout>

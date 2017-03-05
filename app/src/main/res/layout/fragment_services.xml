@@ -4,6 +4,6 @@
     android:layout_height="match_parent"
     tools:context="sourabh.ichiapp.fragments.ServicesFragment">
 
-    <include layout="@layout/gridview" ></include>
+    <include layout="@layout/gridview_slider" ></include>
 
 </RelativeLayout>

@@ -1,6 +1,7 @@
 package sourabh.ichiapp.data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by Downloader on 2/25/2017.
@@ -14,6 +15,16 @@ public class OfferCategoryData implements Serializable {
     private Integer status;
     private String createdOn;
     private String image;
+
+    private List<OfferCategoryData> subcategories = null;
+
+    public List<OfferCategoryData> getSubcategories() {
+        return subcategories;
+    }
+
+    public void setSubcategories(List<OfferCategoryData> subcategories) {
+        this.subcategories = subcategories;
+    }
 
     public String getImage() {
         return image;

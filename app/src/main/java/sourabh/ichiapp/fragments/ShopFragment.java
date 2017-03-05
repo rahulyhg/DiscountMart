@@ -4,11 +4,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatDialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -18,6 +26,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,6 +34,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,6 +61,9 @@ public class ShopFragment extends Fragment {
 
     @BindView(R.id.grid_view)
     GridView gridView;
+
+    View view;
+
 
     ArrayList<Class> adSliderDataArrayList;
 
@@ -85,7 +98,7 @@ public class ShopFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_shop, container, false);
+        view = inflater.inflate(R.layout.fragment_shop, container, false);
 
 
         ButterKnife.bind(this, view);
@@ -168,16 +181,29 @@ public class ShopFragment extends Fragment {
                     OfferCategoryData offerCategoryData = (OfferCategoryData) Class.forName(Const.ClassNameOfferCategoryData).cast(offerCategoriesDataList.get(position));
 
 
-                    // Sending image id to FullScreenActivity
-                    Intent i = new Intent(context, RetailersActivity.class);
-                    // passing array index
+                    ArrayList<OfferCategoryData> subcategories = (ArrayList<OfferCategoryData>) offerCategoryData.getSubcategories();
+                    if(subcategories.size()>0){
 
-                    String strOfferData = CommonUtilities.getJsonStringFromObject(offerCategoryData);
-                    // i.putExtra(Const.KEY_OFFER_DATA, strOfferData);
-                    i.putExtra(Const.KEY_OFFER_DATA, offerCategoryData);
+                        //showAlertDialog(subcategories);
+
+                        FragmentManager fm = getFragmentManager();
+                        SubCategoryDialogFragment dialogFragment = new SubCategoryDialogFragment (subcategories);
+                        dialogFragment.show(fm, "Sample Fragment");
 
 
-                    startActivity(i);
+                    }else{
+                        // Sending image id to FullScreenActivity
+                        Intent i = new Intent(context, RetailersActivity.class);
+                        // passing array index
+
+                        String strOfferData = CommonUtilities.getJsonStringFromObject(offerCategoryData);
+                        // i.putExtra(Const.KEY_OFFER_DATA, strOfferData);
+                        i.putExtra(Const.KEY_OFFER_DATA, offerCategoryData);
+
+
+                        startActivity(i);
+                    }
+
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -210,4 +236,12 @@ public class ShopFragment extends Fragment {
 
     }
 
+
 }
+
+
+
+
+
+
+
