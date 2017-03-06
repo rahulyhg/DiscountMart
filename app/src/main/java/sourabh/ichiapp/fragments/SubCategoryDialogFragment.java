@@ -21,9 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sourabh.ichiapp.R;
-import sourabh.ichiapp.activities.RetailersActivity;
-import sourabh.ichiapp.data.OfferCategoryData;
-import sourabh.ichiapp.helper.CommonUtilities;
+import sourabh.ichiapp.activities.ProductsActivity;
+import sourabh.ichiapp.data.GenericCategoryData;
 import sourabh.ichiapp.helper.Const;
 
 /**
@@ -32,9 +31,9 @@ import sourabh.ichiapp.helper.Const;
 
 public class SubCategoryDialogFragment extends DialogFragment
 {
-    ArrayList<OfferCategoryData>subCategories = null;
+    ArrayList<GenericCategoryData>subCategories = null;
 
-    public SubCategoryDialogFragment(ArrayList<OfferCategoryData>subCategories)
+    public SubCategoryDialogFragment(ArrayList<GenericCategoryData>subCategories)
     {
         this.subCategories = subCategories;
     }
@@ -56,6 +55,10 @@ public class SubCategoryDialogFragment extends DialogFragment
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 
+                Intent i = new Intent(getContext(), ProductsActivity.class);
+                i.putExtra(Const.KEY_PRODUCT_CATEGORY_DATA, subCategories.get(position));
+
+                startActivity(i);
             }
         });
 
@@ -66,13 +69,13 @@ public class SubCategoryDialogFragment extends DialogFragment
 class SubCategoryAdaptor extends BaseAdapter {
 
     private Context mContext;
-    private List<OfferCategoryData> offerCategoriesDataArrayList;
-    OfferCategoryData offerCategoriesData = null;
+    private List<GenericCategoryData> offerCategoriesDataArrayList;
+    GenericCategoryData offerCategoriesData = null;
 
     // Constructor
     public SubCategoryAdaptor(
             Context context,
-            List<OfferCategoryData> offerCategoriesDataArrayList
+            List<GenericCategoryData> offerCategoriesDataArrayList
     ) {
 
         mContext = context;
@@ -100,7 +103,7 @@ class SubCategoryAdaptor extends BaseAdapter {
 
 
         try {
-            offerCategoriesData = (OfferCategoryData) Class.forName(Const.ClassNameOfferCategoryData).cast(offerCategoriesDataArrayList.get(position));
+            offerCategoriesData = (GenericCategoryData) Class.forName(Const.ClassNameOfferCategoryData).cast(offerCategoriesDataArrayList.get(position));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

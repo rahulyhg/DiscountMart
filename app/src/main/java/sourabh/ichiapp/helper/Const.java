@@ -17,7 +17,8 @@ public class Const {
 	public static final String ClassNameAdSliderData = "sourabh.ichiapp.data.AdSliderData";
 	public static final String ClassNameServiceCategoriesData = "sourabh.ichiapp.data.ServiceCategoriesData";
 	public static final String ClassNameServiceProviderData = "sourabh.ichiapp.data.ServiceProviderData";
-	public static final String ClassNameOfferCategoryData = "sourabh.ichiapp.data.OfferCategoryData";
+	public static final String ClassNameOfferCategoryData = "sourabh.ichiapp.data.GenericCategoryData";
+	public static final String ClassNameProductData = "sourabh.ichiapp.data.ProductData";
 
 	public static final String GUEST_API_KEY = "guest";
 
@@ -25,6 +26,7 @@ public class Const {
 	public static final String KEY_ADS = "ads";
 	public static final String KEY_SERVICE_PROVIDERS = "service_providers";
 	public static final String KEY_RETAILERS = "retailers";
+	public static final String KEY_PRODUCTS = "products";
 
 	public static final String KEY_MESSAGE = "message";
 	public static final String KEY_DATA = "data";
@@ -34,6 +36,7 @@ public class Const {
 	public static final String KEY_CATEGORY_ID = "category_id";
 	public static final String KEY_OFFER_IMAGE = "offer_image";
 	public static final String KEY_OFFER_DATA = "offer_data";
+	public static final String KEY_PRODUCT_CATEGORY_DATA = "product_category_data";
 
 	public static final String KEY_COUPON_CODE = "coupon_code";
 	public static final String KEY_COUPON = "coupon";

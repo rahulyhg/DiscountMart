@@ -1,11 +1,13 @@
 package sourabh.ichiapp.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -14,7 +16,10 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -37,12 +42,16 @@ import sourabh.ichiapp.R;
 import sourabh.ichiapp.app.AppConfig;
 import sourabh.ichiapp.app.CustomRequest;
 import sourabh.ichiapp.data.AdSliderData;
+import sourabh.ichiapp.data.GlobaDataHolder;
+import sourabh.ichiapp.data.ProductData;
 import sourabh.ichiapp.fragments.ShopFragment;
 import sourabh.ichiapp.fragments.ServicesFragment;
 import sourabh.ichiapp.fragments.DiscountFragment;
 import sourabh.ichiapp.helper.CommonUtilities;
 import sourabh.ichiapp.helper.Const;
 import sourabh.ichiapp.helper.JsonSeparator;
+import sourabh.ichiapp.helper.PreferenceHelper;
+import sourabh.ichiapp.helper.TinyDB;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -57,6 +66,8 @@ public class HomeActivity extends AppCompatActivity
     TabLayout tabLayout;
 
     Context context;
+    Button BtnCartCount;
+    String cart_count;
 
 
 
@@ -80,6 +91,14 @@ public class HomeActivity extends AppCompatActivity
 //                        .setAction("Action", null).show();
 //            }
 //        });
+
+
+       GlobaDataHolder.getGlobaDataHolder().setShoppingList(
+                new TinyDB(getApplicationContext()).getListObject(
+                        PreferenceHelper.MY_CART_LIST_LOCAL, ProductData.class));
+
+
+        updateCartCount(GlobaDataHolder.getGlobaDataHolder().getShoppingList().size());
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -215,11 +234,39 @@ public class HomeActivity extends AppCompatActivity
         }
     }
 
+
+
+
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.home, menu);
+//        return true;
+
+        menu.clear();
         getMenuInflater().inflate(R.menu.home, menu);
+
+        MenuItem item = menu.findItem(R.id.cart_count);
+        MenuItemCompat.setActionView(item, R.layout.cart_update_count);
+        View view = MenuItemCompat.getActionView(item);
+        BtnCartCount = (Button)view.findViewById(R.id.cart_count);
+        BtnCartCount.setText(String.valueOf(cart_count));
+
+
+        BtnCartCount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),CartActivity.class));
+            }
+        });
+
         return true;
+    }
+    private void updateCartCount(int count){
+        cart_count = count+"";
+        supportInvalidateOptionsMenu();
     }
 
     @Override
@@ -230,7 +277,7 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.cart_count) {
             return true;
         }
 
@@ -261,4 +308,24 @@ public class HomeActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // Store Shopping Cart in DB
+        new TinyDB(getApplicationContext()).putListObject(
+                PreferenceHelper.MY_CART_LIST_LOCAL, GlobaDataHolder
+                        .getGlobaDataHolder().getShoppingList());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        updateCartCount(GlobaDataHolder.getGlobaDataHolder().getShoppingList().size());
+
+    }
+
+
 }

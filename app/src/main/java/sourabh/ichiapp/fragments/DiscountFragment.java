@@ -3,7 +3,6 @@ package sourabh.ichiapp.fragments;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,28 +18,23 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
-import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import sourabh.ichiapp.R;
 import sourabh.ichiapp.activities.RetailersActivity;
-import sourabh.ichiapp.activities.ServiceProvidersActivity;
-import sourabh.ichiapp.adaptors.OfferCategoryAdaptor;
-import sourabh.ichiapp.adaptors.ServiceCategoryAdaptor;
+import sourabh.ichiapp.adaptors.GenericCategoryAdaptor;
 import sourabh.ichiapp.app.AppConfig;
 import sourabh.ichiapp.app.CustomRequest;
 import sourabh.ichiapp.data.AdSliderData;
-import sourabh.ichiapp.data.OfferCategoryData;
-import sourabh.ichiapp.data.ServiceCategoriesData;
+import sourabh.ichiapp.data.GenericCategoryData;
 import sourabh.ichiapp.helper.CommonUtilities;
 import sourabh.ichiapp.helper.Const;
 import sourabh.ichiapp.helper.JsonSeparator;
@@ -134,7 +128,7 @@ public class DiscountFragment extends Fragment {
                                 JSONObject registerResponceJson = js.getData() ;
                                 JSONArray array =  CommonUtilities.getArrayFromJsonObj(registerResponceJson,Const.KEY_CATEGORIES);
 
-                                setOfferCategories(CommonUtilities.getObjectsArrayFromJsonArray(array,OfferCategoryData.class));
+                                setOfferCategories(CommonUtilities.getObjectsArrayFromJsonArray(array,GenericCategoryData.class));
 
                             }
                         } catch (JSONException e) {
@@ -166,7 +160,7 @@ public class DiscountFragment extends Fragment {
     void setOfferCategories(final ArrayList<Class> offerCategoriesDataList){
 
 
-        gridView.setAdapter(new OfferCategoryAdaptor(context,offerCategoriesDataList,false));
+        gridView.setAdapter(new GenericCategoryAdaptor(context,offerCategoriesDataList,false));
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -174,16 +168,16 @@ public class DiscountFragment extends Fragment {
                                     int position, long id) {
 
                 try {
-                    OfferCategoryData offerCategoryData = (OfferCategoryData) Class.forName(Const.ClassNameOfferCategoryData).cast(offerCategoriesDataList.get(position));
+                    GenericCategoryData genericCategoryData = (GenericCategoryData) Class.forName(Const.ClassNameOfferCategoryData).cast(offerCategoriesDataList.get(position));
 
 
                     // Sending image id to FullScreenActivity
                     Intent i = new Intent(context, RetailersActivity.class);
                     // passing array index
 
-                    String strOfferData = CommonUtilities.getJsonStringFromObject(offerCategoryData);
+                    String strOfferData = CommonUtilities.getJsonStringFromObject(genericCategoryData);
                    // i.putExtra(Const.KEY_OFFER_DATA, strOfferData);
-                    i.putExtra(Const.KEY_OFFER_DATA, offerCategoryData);
+                    i.putExtra(Const.KEY_OFFER_DATA, genericCategoryData);
 
 
                     startActivity(i);

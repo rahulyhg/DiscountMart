@@ -20,7 +20,7 @@ import java.util.List;
 import sourabh.ichiapp.R;
 import sourabh.ichiapp.activities.RetailerProfileAndCouponActivity;
 import sourabh.ichiapp.app.AppController;
-import sourabh.ichiapp.data.OfferCategoryData;
+import sourabh.ichiapp.data.GenericCategoryData;
 import sourabh.ichiapp.data.ServiceProviderData;
 import sourabh.ichiapp.helper.Const;
 
@@ -35,14 +35,14 @@ public class ServiceProvidersAdaptor extends BaseAdapter {
     private List<ServiceProviderData> serviceProviderDataList;
     ImageLoader imageLoader = AppController.getInstance().getImageLoader();
     ServiceProviderData m;
-    private OfferCategoryData offerCategoryData;
+    private GenericCategoryData genericCategoryData;
     int position;
     public ServiceProvidersAdaptor(Activity activity,
                                    List<ServiceProviderData> serviceProviderDataList,
-                                   OfferCategoryData offerCategoryData) {
+                                   GenericCategoryData genericCategoryData) {
         this.activity = activity;
         this.serviceProviderDataList = serviceProviderDataList;
-        this.offerCategoryData = offerCategoryData;
+        this.genericCategoryData = genericCategoryData;
     }
 
 
@@ -129,7 +129,7 @@ public class ServiceProvidersAdaptor extends BaseAdapter {
                                         Intent i = new Intent(activity, RetailerProfileAndCouponActivity.class);
 
                                          i.putExtra(Const.KEY_RETAILERS,new Gson().toJson(serviceProviderDataList.get(position)));
-                                         i.putExtra(Const.KEY_OFFER_DATA,new Gson().toJson(offerCategoryData));
+                                         i.putExtra(Const.KEY_OFFER_DATA,new Gson().toJson(genericCategoryData));
                                          activity.startActivity(i);
                                      }
                                  }

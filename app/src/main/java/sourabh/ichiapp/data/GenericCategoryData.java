@@ -7,7 +7,7 @@ import java.util.List;
  * Created by Downloader on 2/25/2017.
  */
 
-public class OfferCategoryData implements Serializable {
+public class GenericCategoryData implements Serializable {
 
     private Integer id;
     private String name;
@@ -16,13 +16,13 @@ public class OfferCategoryData implements Serializable {
     private String createdOn;
     private String image;
 
-    private List<OfferCategoryData> subcategories = null;
+    private List<GenericCategoryData> subcategories = null;
 
-    public List<OfferCategoryData> getSubcategories() {
+    public List<GenericCategoryData> getSubcategories() {
         return subcategories;
     }
 
-    public void setSubcategories(List<OfferCategoryData> subcategories) {
+    public void setSubcategories(List<GenericCategoryData> subcategories) {
         this.subcategories = subcategories;
     }
 

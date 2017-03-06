@@ -2,20 +2,14 @@ package sourabh.ichiapp.activities;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,10 +20,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
-import com.google.gson.Gson;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Transformation;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,17 +36,14 @@ import sourabh.ichiapp.R;
 import sourabh.ichiapp.app.AppConfig;
 import sourabh.ichiapp.app.AppController;
 import sourabh.ichiapp.app.CustomRequest;
-import sourabh.ichiapp.data.OfferCategoryData;
+import sourabh.ichiapp.data.GenericCategoryData;
 import sourabh.ichiapp.data.ServiceProviderData;
 import sourabh.ichiapp.helper.CommonUtilities;
 import sourabh.ichiapp.helper.Const;
 import sourabh.ichiapp.helper.JsonSeparator;
 
-import static android.R.attr.banner;
-import static android.R.attr.width;
 import static sourabh.ichiapp.R.id.address;
 import static sourabh.ichiapp.R.id.phone;
-import static sourabh.ichiapp.helper.Const.KEY_OFFER_IMAGE;
 
 public class RetailerProfileAndCouponActivity extends AppCompatActivity {
 
@@ -72,7 +61,7 @@ public class RetailerProfileAndCouponActivity extends AppCompatActivity {
 
 
     Context context;
-    OfferCategoryData offerCategoryData;
+    GenericCategoryData genericCategoryData;
     ServiceProviderData serviceProviderData;
 
     @Override
@@ -84,10 +73,10 @@ public class RetailerProfileAndCouponActivity extends AppCompatActivity {
 
 
         serviceProviderData = CommonUtilities.getObjectFromJsonString(getIntent().getStringExtra(Const.KEY_RETAILERS),ServiceProviderData.class);
-        offerCategoryData = CommonUtilities.getObjectFromJsonString(getIntent().getStringExtra(Const.KEY_OFFER_DATA),OfferCategoryData.class);
+        genericCategoryData = CommonUtilities.getObjectFromJsonString(getIntent().getStringExtra(Const.KEY_OFFER_DATA),GenericCategoryData.class);
 
 
-        offer_image = offerCategoryData.getImage();
+        offer_image = genericCategoryData.getImage();
 
         setViews();
 
@@ -163,7 +152,7 @@ public class RetailerProfileAndCouponActivity extends AppCompatActivity {
 
 
         Map<String, String> params = new HashMap<String, String>();
-        params.put("id_offer",offerCategoryData.getId().toString());
+        params.put("id_offer", genericCategoryData.getId().toString());
         params.put("id_retailer",serviceProviderData.getId().toString());
         params.put("id_user","1");
 

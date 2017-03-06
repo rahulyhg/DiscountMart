@@ -13,24 +13,21 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import sourabh.ichiapp.R;
-import sourabh.ichiapp.data.OfferCategoryData;
-import sourabh.ichiapp.data.ServiceCategoriesData;
+import sourabh.ichiapp.data.GenericCategoryData;
 import sourabh.ichiapp.helper.Const;
-
-import static sourabh.ichiapp.R.id.imageView;
 
 /**
  * Created by Downloader on 2/23/2017.
  */
 
-public class OfferCategoryAdaptor extends BaseAdapter{
+public class GenericCategoryAdaptor extends BaseAdapter{
 
     private Context mContext;
     private ArrayList<Class> offerCategoriesDataArrayList;
-    OfferCategoryData offerCategoriesData = null;
+    GenericCategoryData offerCategoriesData = null;
     Boolean isShopping;
     // Constructor
-    public OfferCategoryAdaptor(
+    public GenericCategoryAdaptor(
             Context context,
             ArrayList<Class> offerCategoriesDataArrayList,
             Boolean isShopping){
@@ -62,7 +59,7 @@ public class OfferCategoryAdaptor extends BaseAdapter{
 
 
         try {
-             offerCategoriesData = (OfferCategoryData) Class.forName(Const.ClassNameOfferCategoryData).cast(offerCategoriesDataArrayList.get(position));
+             offerCategoriesData = (GenericCategoryData) Class.forName(Const.ClassNameOfferCategoryData).cast(offerCategoriesDataArrayList.get(position));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

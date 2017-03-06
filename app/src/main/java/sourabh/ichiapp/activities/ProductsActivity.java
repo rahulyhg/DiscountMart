@@ -23,16 +23,16 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import sourabh.ichiapp.R;
-import sourabh.ichiapp.adaptors.ServiceProvidersAdaptor;
+import sourabh.ichiapp.adaptors.ProductsAdaptor;
 import sourabh.ichiapp.app.AppConfig;
 import sourabh.ichiapp.app.CustomRequest;
 import sourabh.ichiapp.data.GenericCategoryData;
-import sourabh.ichiapp.data.ServiceProviderData;
+import sourabh.ichiapp.data.ProductData;
 import sourabh.ichiapp.helper.CommonUtilities;
 import sourabh.ichiapp.helper.Const;
 import sourabh.ichiapp.helper.JsonSeparator;
 
-public class RetailersActivity extends AppCompatActivity {
+public class ProductsActivity extends AppCompatActivity {
 
 
     Context context;
@@ -41,43 +41,43 @@ public class RetailersActivity extends AppCompatActivity {
     ListView listView;
 
 
-    private ServiceProvidersAdaptor serviceProvidersAdaptor;
-    private List<ServiceProviderData> serviceProviderDataList = new ArrayList<ServiceProviderData>();
-    String city_id = "1";
+    private ProductsAdaptor productsAdaptor;
+    private List<ProductData> productDataList = new ArrayList<ProductData>();
+    String retailer_id = "1";
     String category_id = "",offer_image="";
     GenericCategoryData genericCategoryData;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_retailers);
+        setContentView(R.layout.activity_products);
 
         ButterKnife.bind(this);
         context = getApplicationContext();
 
 
 
-        genericCategoryData = (GenericCategoryData) getIntent().getExtras().getSerializable(Const.KEY_OFFER_DATA);
+        genericCategoryData = (GenericCategoryData) getIntent().getExtras().getSerializable(Const.KEY_PRODUCT_CATEGORY_DATA);
 
 
         category_id = genericCategoryData.getId().toString();
         offer_image = genericCategoryData.getImage();
 
-        city_id = "1";
+        retailer_id = "all";
 
-        serviceProvidersAdaptor = new ServiceProvidersAdaptor(this, serviceProviderDataList, genericCategoryData);
-        listView.setAdapter(serviceProvidersAdaptor);
+        productsAdaptor = new ProductsAdaptor(this, productDataList);
+        listView.setAdapter(productsAdaptor);
 
-        getRetailers(city_id,category_id);
-
+        getProducts(category_id,retailer_id);
 
 
     }
 
-    void getRetailers(String city_id, String category_id)
+    void getProducts(String category_id, String retailer_id)
     {
 
-        String url = AppConfig.URL_GET_RETAILERS+city_id+"/"+category_id;
+        String url = AppConfig.URL_GET_PRODUCTS+category_id+"/"+retailer_id;
 
 
 
@@ -100,9 +100,9 @@ public class RetailersActivity extends AppCompatActivity {
                             }else{
 
                                 JSONObject registerResponceJson = js.getData() ;
-                                JSONArray adsArr =  CommonUtilities.getArrayFromJsonObj(registerResponceJson, Const.KEY_RETAILERS);
+                                JSONArray adsArr =  CommonUtilities.getArrayFromJsonObj(registerResponceJson, Const.KEY_PRODUCTS);
 
-                                setList(CommonUtilities.getObjectsArrayFromJsonArray(adsArr,ServiceProviderData.class));
+                                setList(CommonUtilities.getObjectsArrayFromJsonArray(adsArr,ProductData.class));
 
                             }
                         } catch (JSONException e) {
@@ -130,13 +130,12 @@ public class RetailersActivity extends AppCompatActivity {
         requestQueue.add(jsObjRequest);
     }
 
-
     void setList(ArrayList<Class> classArrayList)
     {
         for (int i = 0; i<classArrayList.size();i++) {
 
             try {
-                serviceProviderDataList.add( (ServiceProviderData) Class.forName(Const.ClassNameServiceProviderData).cast(classArrayList.get(i)));
+                productDataList.add( (ProductData) Class.forName(Const.ClassNameProductData).cast(classArrayList.get(i)));
 
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
@@ -144,7 +143,6 @@ public class RetailersActivity extends AppCompatActivity {
 
 
         }
-        serviceProvidersAdaptor.notifyDataSetChanged();
+        productsAdaptor.notifyDataSetChanged();
     }
-
 }

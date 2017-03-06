@@ -6,7 +6,7 @@ public class AppConfig {
 
 	// Server user register url
 //	public static String BASE = "http://mindwingstech.com/LifeLine/services/v1/";
-	public static String BASE = "http://192.168.0.101/ichi/v1/";
+	public static String BASE = "http://192.168.1.100/ichiapp_web/v1/";
 
 	public static String URL_GET_CITIES = BASE + "get_cities/";
 	public static String URL_REGISTER = BASE + "register";
@@ -20,6 +20,7 @@ public class AppConfig {
 	public static String URL_GET_RETAILERS = BASE + "get_retailers/";
 	public static String URL_CREATE_COUPON_REQUEST = BASE + "create_coupon_request";
 	public static String URL_VALIDATE_COUPON = BASE + "validate_coupon/";
+	public static String URL_GET_PRODUCTS = BASE + "get_products/";
 
 
 
