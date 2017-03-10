@@ -2,6 +2,9 @@ package sourabh.ichiapp.adaptors;
 
 import android.app.Activity;
 import android.content.Context;
+import android.text.Spannable;
+import android.text.Spanned;
+import android.text.style.StrikethroughSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +20,10 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import sourabh.ichiapp.R;
+import sourabh.ichiapp.activities.CartActivity;
 import sourabh.ichiapp.app.AppController;
 import sourabh.ichiapp.data.GlobaDataHolder;
+import sourabh.ichiapp.data.Money;
 import sourabh.ichiapp.data.ProductData;
 
 /**
@@ -33,11 +38,18 @@ public class ProductsAdaptor extends BaseAdapter {
     ImageLoader imageLoader = AppController.getInstance().getImageLoader();
     ProductData m;
     int position;
+    Boolean isCart;
+    private Context context;
+
     public ProductsAdaptor(Activity activity,
-                           List<ProductData> productsDataList
-                           ) {
+                           Context context,
+                           List<ProductData> productsDataList,
+                           Boolean isCart) {
         this.activity = activity;
         this.productsDataList = productsDataList;
+        this.isCart = isCart;
+        this.context = context;
+
     }
 
 
@@ -80,6 +92,8 @@ public class ProductsAdaptor extends BaseAdapter {
                 .findViewById(R.id.product_thumb);
         TextView txtName = (TextView) convertView.findViewById(R.id.item_name);
         TextView txtDescription = (TextView) convertView.findViewById(R.id.item_short_desc);
+
+
         TextView txtPrice = (TextView) convertView.findViewById(R.id.item_price);
         TextView txtAddItem = (TextView) convertView.findViewById(R.id.add_item);
         final TextView txtItemAmount = (TextView) convertView.findViewById(R.id.item_amount);
@@ -90,13 +104,34 @@ public class ProductsAdaptor extends BaseAdapter {
 
         name = m.getName();
         description = m.getDescription();
-        price = String.valueOf(m.getPrice());
+
+
+        String mrp = Money.rupees(
+                BigDecimal.valueOf(Double.valueOf(m.getMrp()
+                        ))).toString()
+                + "  ";
+
+        String discounted_price = Money.rupees(
+                BigDecimal.valueOf(Double.valueOf(m.getPrice()
+                ))).toString();
+
+        String costString = discounted_price+"   "+ mrp;
+
+        txtPrice.setText(costString, TextView.BufferType.SPANNABLE);
+
+
+        Spannable spannable = (Spannable) txtPrice.getText();
+
+        spannable.setSpan(new StrikethroughSpan(), mrp.length(),
+                costString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+
+
         // thumbnail image
         thumbNail.setImageUrl(m.getImage(), imageLoader);
 
         txtName.setText(name);
         txtDescription.setText(description);
-        txtPrice.setText(price);
 
         if (GlobaDataHolder.getGlobaDataHolder()
                 .getShoppingList().contains(m)) {
@@ -152,13 +187,20 @@ public class ProductsAdaptor extends BaseAdapter {
 
 
                     //update checkout amount
-//                    ((ECartHomeActivity) getContext()).updateCheckOutAmount(
-//                            BigDecimal
-//                                    .valueOf(Long
-//                                            .valueOf(productList
-//                                                    .get(position)
-//                                                    .getSellMRP())),
-//                            true);
+                    if(isCart){
+
+                        ((CartActivity) getContext()).updateCheckOutAmount(
+                                BigDecimal
+                                        .valueOf(Double
+                                                .valueOf(m
+                                                        .getPrice())),
+
+                                BigDecimal.valueOf((m.getMrp()-(m.getPrice()))),
+
+
+                                true);
+                    }
+
 
                     // update current item quanitity
 //                    holder.quanitity.setText(m.getQuantity());
@@ -174,14 +216,19 @@ public class ProductsAdaptor extends BaseAdapter {
                     GlobaDataHolder.getGlobaDataHolder()
                             .getShoppingList().add(tempObj);
 
-//                    ((ECartHomeActivity) getContext()).updateCheckOutAmount(
-//                            BigDecimal
-//                                    .valueOf(Long
-//                                            .valueOf(productList
-//                                                    .get(position)
-//                                                    .getSellMRP())),
-//                            true);
+                    if(isCart) {
 
+
+                        ((CartActivity) getContext()).updateCheckOutAmount(
+                                BigDecimal
+                                        .valueOf(Double
+                                                .valueOf(m
+                                                        .getPrice())),
+                                BigDecimal.valueOf((m.getMrp()-(m.getPrice()))),
+
+                                true);
+
+                    }
                 }
 
 
@@ -217,10 +264,16 @@ public class ProductsAdaptor extends BaseAdapter {
                                         String.valueOf(Integer.valueOf(tempObj
                                                 .getQuantity()) - 1));
 
-//                        ((ECartHomeActivity) getContext()).updateCheckOutAmount(
-//                                BigDecimal.valueOf(Long.valueOf(productList
-//                                        .get(position).getSellMRP())),
-//                                false);
+                        if(isCart) {
+                            ((CartActivity) getContext()).updateCheckOutAmount(
+                                    BigDecimal
+                                            .valueOf(Double
+                                                    .valueOf(m
+                                                            .getPrice())),
+                                    BigDecimal.valueOf((m.getMrp()-(m.getPrice()))),
+
+                                    false);
+                        }
 //
 //                        holder.quanitity.setText(GlobaDataHolder
 //                                .getGlobaDataHolder().getShoppingList()
@@ -282,5 +335,10 @@ public class ProductsAdaptor extends BaseAdapter {
 //        year.setText(String.valueOf(m.getPhone()));
 
         return convertView;
+    }
+
+    private CartActivity getContext() {
+        // TODO Auto-generated method stub
+        return (CartActivity) context;
     }
 }

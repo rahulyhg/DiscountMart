@@ -2,11 +2,14 @@ package sourabh.ichiapp.activities;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.design.widget.NavigationView;
@@ -16,7 +19,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -27,6 +29,29 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.mikepenz.community_material_typeface_library.CommunityMaterial;
+import com.mikepenz.fontawesome_typeface_library.FontAwesome;
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.IconicsDrawable;
+import com.mikepenz.iconics.context.IconicsLayoutInflater;
+import com.mikepenz.itemanimators.AlphaCrossFadeAnimator;
+import com.mikepenz.materialdrawer.AccountHeader;
+import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
+import com.mikepenz.materialdrawer.holder.BadgeStyle;
+import com.mikepenz.materialdrawer.model.DividerDrawerItem;
+import com.mikepenz.materialdrawer.model.ExpandableDrawerItem;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondarySwitchDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryToggleDrawerItem;
+import com.mikepenz.materialdrawer.model.SectionDrawerItem;
+import com.mikepenz.materialdrawer.model.SwitchDrawerItem;
+import com.mikepenz.materialdrawer.model.ToggleDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -51,16 +76,24 @@ import sourabh.ichiapp.helper.CommonUtilities;
 import sourabh.ichiapp.helper.Const;
 import sourabh.ichiapp.helper.JsonSeparator;
 import sourabh.ichiapp.helper.PreferenceHelper;
+import sourabh.ichiapp.helper.SessionManager;
 import sourabh.ichiapp.helper.TinyDB;
+
+import static sourabh.ichiapp.R.id.toolbar;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
 
 
+    private AccountHeader headerResult = null;
+    private Drawer result = null;
 
     @BindView(R.id.viewpager)
     ViewPager viewPager;
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     @BindView(R.id.tabs)
     TabLayout tabLayout;
@@ -69,6 +102,7 @@ public class HomeActivity extends AppCompatActivity
     Button BtnCartCount;
     String cart_count;
 
+    SessionManager sessionManager;
 
 
     @Override
@@ -76,11 +110,11 @@ public class HomeActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+
         ButterKnife.bind(this);
         context = getApplicationContext();
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
 //        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -92,22 +126,34 @@ public class HomeActivity extends AppCompatActivity
 //            }
 //        });
 
+        sessionManager =  new SessionManager(this);
 
-       GlobaDataHolder.getGlobaDataHolder().setShoppingList(
+        if (!sessionManager.isLoggedIn()) {
+            logoutUser();
+        }
+
+        GlobaDataHolder.getGlobaDataHolder().setShoppingList(
                 new TinyDB(getApplicationContext()).getListObject(
                         PreferenceHelper.MY_CART_LIST_LOCAL, ProductData.class));
 
 
         updateCartCount(GlobaDataHolder.getGlobaDataHolder().getShoppingList().size());
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
+//        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+//        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+//                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+//        drawer.setDrawerListener(toggle);
+//        toggle.syncState();
+//
+//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+//        navigationView.setNavigationItemSelectedListener(this);
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+
+
+
+        setupDrawer();
+
+
 
 
 
@@ -172,7 +218,7 @@ public class HomeActivity extends AppCompatActivity
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
 
-        CustomRequest jsObjRequest   = new CustomRequest(this,true, Request.Method.GET, url, CommonUtilities.buildBlankParams(), CommonUtilities.buildHeaders(),
+        CustomRequest jsObjRequest   = new CustomRequest(this,true, Request.Method.GET, url, CommonUtilities.buildBlankParams(), CommonUtilities.buildGuestHeaders(),
 
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -290,7 +336,7 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_retailers) {
             // Handle the camera action
         } else if (id == R.id.nav_gallery) {
 
@@ -327,5 +373,141 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
+    private void logoutUser() {
 
-}
+        sessionManager.clearAll();
+        sessionManager.setLogin(false);
+
+
+        // Launching the login activity
+        Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+
+    void setupDrawer() {
+
+
+        PrimaryDrawerItem home = new PrimaryDrawerItem().
+                                            withName("Home").
+                                        //withDescription(R.string.drawer_item_compact_header_desc).
+                                        withIcon(new IconicsDrawable(this)
+                                                .icon(FontAwesome.Icon.faw_home)
+//                                                .color(Color.RED)
+                                                .sizeDp(24)).
+                                        withIdentifier(1);
+
+        SecondaryDrawerItem about_us = new SecondaryDrawerItem()
+                                            .withIdentifier(2)
+                                            .withName("About Us")
+                .withIcon(new IconicsDrawable(this)
+                        .icon(GoogleMaterial.Icon.gmd_assignment)
+//                                                .color(Color.RED)
+                        .sizeDp(24));
+
+
+        SecondaryDrawerItem contact_us = new SecondaryDrawerItem()
+                .withIdentifier(2)
+                .withName("Contact Us")
+                .withIcon(new IconicsDrawable(this)
+                        .icon(GoogleMaterial.Icon.gmd_contact_mail)
+//                                                .color(Color.RED)
+                        .sizeDp(24));
+
+
+        ExpandableDrawerItem retailers =  new ExpandableDrawerItem().withName("Retailers").
+                                withIcon(new IconicsDrawable(this)
+                                        .icon(FontAwesome.Icon.faw_list_alt)
+//                                                .color(Color.RED)
+                                        .sizeDp(24)).
+        withIdentifier(19).
+                withSelectable(false).
+                withSubItems
+                        (
+                                new SecondaryDrawerItem()
+                                        .withName("CollapsableItem")
+                                        .withLevel(2)
+//                                                    .withIcon(new IconicsDrawable(this)
+//                                                            .icon(FontAwesome.Icon.faw_list_alt)
+////                                                .color(Color.RED)
+//                                                            .sizeDp(24))
+                                        .withIdentifier(2001),
+
+                                new SecondaryDrawerItem().
+                                        withName("CollapsableItem 2").
+                                        withLevel(2).
+//                                                        withIcon(GoogleMaterial.Icon.gmd_8tracks).
+                                        withIdentifier(2002)
+                        );
+
+        PrimaryDrawerItem profile = new PrimaryDrawerItem().
+                withName("Profile").
+                //withDescription(R.string.drawer_item_compact_header_desc).
+                withIcon(new IconicsDrawable(this)
+                        .icon(GoogleMaterial.Icon.gmd_account_circle)
+//                                                .color(Color.RED)
+                        .sizeDp(24)).
+                        withIdentifier(3);
+
+
+        PrimaryDrawerItem logout = new PrimaryDrawerItem().
+                withName("Log Out").
+                //withDescription(R.string.drawer_item_compact_header_desc).
+                        withIcon(new IconicsDrawable(this)
+                        .icon(CommunityMaterial.Icon.cmd_logout)
+//                                                .color(Color.RED)
+                        .sizeDp(24)).
+                        withIdentifier(3).
+                        withSelectable(false);
+
+
+        PrimaryDrawerItem retailers_home = new PrimaryDrawerItem().
+                withName("Retailer's Home").
+                //withDescription(R.string.drawer_item_compact_header_desc).
+                        withIcon(new IconicsDrawable(this)
+                        .icon(CommunityMaterial.Icon.cmd_home_variant)
+//                                                .color(Color.RED)
+                        .sizeDp(24)).
+                        withIdentifier(3);
+
+        AccountHeader headerResult = new AccountHeaderBuilder()
+                .withActivity(this)
+                .withHeaderBackground(R.drawable.gradient_black_bg)
+                .addProfiles(
+                        new ProfileDrawerItem().
+                                withName(sessionManager.getFname()+" "+sessionManager.getLname()).
+                                withEmail(sessionManager.getPhone()).
+                                withTextColor(getResources().getColor(R.color.white))
+                )
+                .withOnAccountHeaderListener(new AccountHeader.OnAccountHeaderListener() {
+                    @Override
+                    public boolean onProfileChanged(View view, IProfile profile, boolean currentProfile) {
+                        return false;
+                    }
+                })
+                .build();
+
+
+        result = new DrawerBuilder()
+                .withActivity(this)
+                .withToolbar(toolbar)
+                .withSliderBackgroundColor(getResources().getColor(R.color.md_blue_grey_100))
+                .withHasStableIds(true)
+                .withItemAnimator(new AlphaCrossFadeAnimator())
+                .withAccountHeader(headerResult) //set the AccountHeader we created earlier for the header
+                .addDrawerItems(
+                            home, retailers, profile,
+                        new DividerDrawerItem(),
+                        about_us, contact_us,
+                         new DividerDrawerItem(),
+                        logout
+
+        )
+                .withShowDrawerOnFirstLaunch(true)
+                .addStickyDrawerItems(retailers_home)
+//                .withShowDrawerUntilDraggedOpened(true)
+                .build();
+
+
+    }}

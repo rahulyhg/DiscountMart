@@ -19,6 +19,7 @@ public class Const {
 	public static final String ClassNameServiceProviderData = "sourabh.ichiapp.data.ServiceProviderData";
 	public static final String ClassNameOfferCategoryData = "sourabh.ichiapp.data.GenericCategoryData";
 	public static final String ClassNameProductData = "sourabh.ichiapp.data.ProductData";
+	public static final String ClassNameAddressData = "sourabh.ichiapp.data.AddressData";
 
 	public static final String GUEST_API_KEY = "guest";
 
@@ -27,6 +28,11 @@ public class Const {
 	public static final String KEY_SERVICE_PROVIDERS = "service_providers";
 	public static final String KEY_RETAILERS = "retailers";
 	public static final String KEY_PRODUCTS = "products";
+	public static final String KEY_ADDRESSES = "addresses";
+
+
+	public static final String MSG_NO_ADDRESS_AVAILABLE = "Address book is emply, please add new address.";
+
 
 	public static final String KEY_MESSAGE = "message";
 	public static final String KEY_DATA = "data";

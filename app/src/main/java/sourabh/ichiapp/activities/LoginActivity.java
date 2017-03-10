@@ -43,6 +43,8 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.btnLogin)
     Button btnLogin;
 
+    @BindView(R.id.btnLinkToRegisterScreen)
+    Button btnLinkToRegisterScreen;
 
     Context context;
     JsonSeparator js;
@@ -86,6 +88,16 @@ public class LoginActivity extends AppCompatActivity {
 
                     Login(context, AppConfig.URL_LOGIN,params,headers);
                 }
+
+            }
+        });
+
+        btnLinkToRegisterScreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                startActivity(new Intent(getApplicationContext(),RegisterActivity.class));
 
             }
         });

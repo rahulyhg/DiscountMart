@@ -110,7 +110,7 @@ public class DiscountFragment extends Fragment {
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
 
-        CustomRequest jsObjRequest   = new CustomRequest(context,true, Request.Method.GET, url, CommonUtilities.buildBlankParams(), CommonUtilities.buildHeaders(),
+        CustomRequest jsObjRequest   = new CustomRequest(context,true, Request.Method.GET, url, CommonUtilities.buildBlankParams(), CommonUtilities.buildGuestHeaders(),
 
                 new Response.Listener<JSONObject>() {
                     @Override

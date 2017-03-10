@@ -165,7 +165,7 @@ public class RetailerProfileAndCouponActivity extends AppCompatActivity {
                 Request.Method.POST,
                 AppConfig.URL_CREATE_COUPON_REQUEST,
                 params,
-                CommonUtilities.buildHeaders(),
+                CommonUtilities.buildGuestHeaders(),
 
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -280,7 +280,7 @@ public class RetailerProfileAndCouponActivity extends AppCompatActivity {
                 Request.Method.PUT,
                 AppConfig.URL_VALIDATE_COUPON+coupon_id,
                 CommonUtilities.buildBlankParams(),
-                CommonUtilities.buildHeaders(),
+                CommonUtilities.buildGuestHeaders(),
 
                 new Response.Listener<JSONObject>() {
                     @Override

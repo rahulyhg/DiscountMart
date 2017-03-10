@@ -1,9 +1,6 @@
 package sourabh.ichiapp.activities;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Movie;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ListView;
@@ -14,7 +11,6 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
-import com.daimajia.slider.library.SliderTypes.TextSliderView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,7 +26,6 @@ import sourabh.ichiapp.R;
 import sourabh.ichiapp.adaptors.ServiceProvidersAdaptor;
 import sourabh.ichiapp.app.AppConfig;
 import sourabh.ichiapp.app.CustomRequest;
-import sourabh.ichiapp.data.AdSliderData;
 import sourabh.ichiapp.data.ServiceProviderData;
 import sourabh.ichiapp.helper.CommonUtilities;
 import sourabh.ichiapp.helper.Const;
@@ -75,7 +70,7 @@ public class ServiceProvidersActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
 
-        CustomRequest jsObjRequest   = new CustomRequest(this,true, Request.Method.GET, url, CommonUtilities.buildBlankParams(), CommonUtilities.buildHeaders(),
+        CustomRequest jsObjRequest   = new CustomRequest(this,true, Request.Method.GET, url, CommonUtilities.buildBlankParams(), CommonUtilities.buildGuestHeaders(),
 
                 new Response.Listener<JSONObject>() {
                     @Override

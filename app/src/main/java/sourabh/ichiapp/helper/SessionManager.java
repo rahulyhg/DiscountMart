@@ -132,6 +132,10 @@ public class SessionManager {
 		return pref.getString(KEY_FNAME,KEY_FNAME) ;
 	}
 
+	public  String getPhone() {
+		return pref.getString(KEY_PHONE,KEY_PHONE) ;
+	}
+
 	public  String getLname() {
 		return pref.getString(KEY_LNAME,KEY_LNAME) ;
 	}

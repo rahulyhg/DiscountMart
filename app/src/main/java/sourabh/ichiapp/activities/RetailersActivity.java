@@ -83,7 +83,7 @@ public class RetailersActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
 
-        CustomRequest jsObjRequest   = new CustomRequest(this,true, Request.Method.GET, url, CommonUtilities.buildBlankParams(), CommonUtilities.buildHeaders(),
+        CustomRequest jsObjRequest   = new CustomRequest(this,true, Request.Method.GET, url, CommonUtilities.buildBlankParams(), CommonUtilities.buildGuestHeaders(),
 
                 new Response.Listener<JSONObject>() {
                     @Override

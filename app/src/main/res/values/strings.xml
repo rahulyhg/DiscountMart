@@ -27,6 +27,9 @@
     <string name="fragment_shop">Home Delivery Products</string>
     <string name="fragment_services">Service Providers</string>
     <string name="fragment_disocunts">Big Discount Offers</string>
+    <string name="hint_address">Address</string>
+    <string name="hint_pincode">Pin Code</string>
+    <string name="btn_add_address">Add Address</string>
 
 
 </resources>

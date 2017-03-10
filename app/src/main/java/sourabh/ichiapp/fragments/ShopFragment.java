@@ -31,7 +31,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import sourabh.ichiapp.R;
 import sourabh.ichiapp.activities.ProductsActivity;
-import sourabh.ichiapp.activities.RetailersActivity;
 import sourabh.ichiapp.adaptors.GenericCategoryAdaptor;
 import sourabh.ichiapp.app.AppConfig;
 import sourabh.ichiapp.app.CustomRequest;
@@ -111,7 +110,7 @@ public class ShopFragment extends Fragment {
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
 
-        CustomRequest jsObjRequest   = new CustomRequest(context,true, Request.Method.GET, url, CommonUtilities.buildBlankParams(), CommonUtilities.buildHeaders(),
+        CustomRequest jsObjRequest   = new CustomRequest(context,true, Request.Method.GET, url, CommonUtilities.buildBlankParams(), CommonUtilities.buildGuestHeaders(),
 
                 new Response.Listener<JSONObject>() {
                     @Override

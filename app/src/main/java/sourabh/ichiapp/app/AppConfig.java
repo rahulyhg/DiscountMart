@@ -21,6 +21,7 @@ public class AppConfig {
 	public static String URL_CREATE_COUPON_REQUEST = BASE + "create_coupon_request";
 	public static String URL_VALIDATE_COUPON = BASE + "validate_coupon/";
 	public static String URL_GET_PRODUCTS = BASE + "get_products/";
+	public static String URL_GET_ADDRESSES = BASE + "get_addresses/";
 
 
 
@@ -42,6 +43,8 @@ public class AppConfig {
 
 	public static String URL_GET_BLOOD_REQUESTS = BASE + "get_blood_requests/";
 	public static String URL_CLOSE_REQUEST = BASE + "close_request/";
+	public static String URL_ADD_ADDRESS = BASE + "add_address";
+	public static String URL_PLACE_ORDER = BASE + "place_order";
 
 	// Google project id
 //	public static final String SENDER_ID = "mindwings-lifeline";

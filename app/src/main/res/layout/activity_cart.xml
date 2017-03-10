@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_cart"
     android:layout_width="match_parent"
@@ -15,7 +16,93 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:divider="@color/list_divider"
+        android:layout_above="@+id/checkout"
         android:dividerHeight="1dp"
+        android:layout_alignParentTop="true"
         android:listSelector="@drawable/list_row_selector" />
+
+
+    <LinearLayout
+        android:id="@+id/checkout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_vertical|center_horizontal"
+
+        android:background="@color/btn_logut_bg"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtCheckOut"
+            android:text="CheckOut"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:layout_gravity="right|center"
+android:layout_weight="0.33"
+            android:textAlignment="center"
+            android:layout_marginTop="5dp"
+            android:layout_margin="10dp"
+            android:textAllCaps="false" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/txtTotalAmt"
+            android:text="Total Amount"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_margin="10dp"
+            android:layout_weight="0.33"
+
+            android:textAlignment="center"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:textStyle="normal|bold" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_weight="0.33"
+
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtYouSaved"
+                android:text="You Saved"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:gravity="center"
+                android:layout_gravity="center"
+
+                android:textAlignment="center"
+                android:layout_marginTop="5dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtSavedAmt"
+                android:text="Saved Amount"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:gravity="center"
+                android:layout_gravity="center"
+
+                android:textAlignment="center"
+                android:textStyle="normal|bold" />
+        </LinearLayout>
+
+
+
+    </LinearLayout>
 
 </RelativeLayout>

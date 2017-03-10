@@ -1,9 +1,12 @@
 package sourabh.ichiapp.activities;
 
+import android.app.Activity;
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.ListView;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -12,78 +15,85 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import sourabh.ichiapp.R;
-import sourabh.ichiapp.adaptors.ProductsAdaptor;
 import sourabh.ichiapp.app.AppConfig;
 import sourabh.ichiapp.app.CustomRequest;
-import sourabh.ichiapp.data.GenericCategoryData;
-import sourabh.ichiapp.data.ProductData;
 import sourabh.ichiapp.helper.CommonUtilities;
-import sourabh.ichiapp.helper.Const;
 import sourabh.ichiapp.helper.JsonSeparator;
 
-public class ProductsActivity extends AppCompatActivity {
+public class AddAddressActivity extends Activity {
 
 
     Context context;
 
-    @BindView(R.id.list)
-    ListView listView;
+    @BindView(R.id.fname)
+    TextView txtFname;
+
+    @BindView(R.id.lname)
+    TextView txtLname;
+
+    @BindView(R.id.address)
+    TextView txtAddreess;
+
+    @BindView(R.id.phone)
+    TextView txtPhone;
+    @BindView(R.id.pincode)
+    TextView txtPinCode;
+    @BindView(R.id.btnAddAddress)
+    TextView btnAddAddress;
 
 
-    private ProductsAdaptor productsAdaptor;
-    private List<ProductData> productDataList = new ArrayList<ProductData>();
-    String retailer_id = "1";
-    String category_id = "",offer_image="";
-    GenericCategoryData genericCategoryData;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_products);
+        this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setContentView(R.layout.activity_add_address);
 
         ButterKnife.bind(this);
         context = getApplicationContext();
 
 
-
-        genericCategoryData = (GenericCategoryData) getIntent().getExtras().getSerializable(Const.KEY_PRODUCT_CATEGORY_DATA);
-
-
-        category_id = genericCategoryData.getId().toString();
-        offer_image = genericCategoryData.getImage();
-
-        retailer_id = "all";
-
-        productsAdaptor = new ProductsAdaptor(this,getApplicationContext(), productDataList,false);
-        listView.setAdapter(productsAdaptor);
-
-        getProducts(category_id,retailer_id);
-
-
+        btnAddAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addAddress();
+            }
+        });
     }
 
-    void getProducts(String category_id, String retailer_id)
+
+    void addAddress()
     {
 
-        String url = AppConfig.URL_GET_PRODUCTS+category_id+"/"+retailer_id;
 
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("fname",txtFname.getText().toString());
+        params.put("lname",txtLname.getText().toString());
+        params.put("phone",txtPhone.getText().toString());
+        params.put("address",txtAddreess.getText().toString());
+        params.put("pincode",txtPinCode.getText().toString());
 
 
         RequestQueue requestQueue = Volley.newRequestQueue(context);
 
-        CustomRequest jsObjRequest   = new CustomRequest(this,true, Request.Method.GET, url, CommonUtilities.buildBlankParams(), CommonUtilities.buildGuestHeaders(),
+        CustomRequest jsObjRequest   = new CustomRequest(context,
+                false,
+                Request.Method.POST,
+                AppConfig.URL_ADD_ADDRESS,
+                params, CommonUtilities.buildHeaders(context),
 
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -93,16 +103,21 @@ public class ProductsActivity extends AppCompatActivity {
 
                         //  Toast.makeText(getApplicationContext(), response.toString(), Toast.LENGTH_LONG).show();
 
-
                         try {
                             if(js.isError()){
                                 Toast.makeText(context, js.getMessage(), Toast.LENGTH_LONG).show();
                             }else{
 
-                                JSONObject registerResponceJson = js.getData() ;
-                                JSONArray adsArr =  CommonUtilities.getArrayFromJsonObj(registerResponceJson, Const.KEY_PRODUCTS);
+                                //JSONObject registerResponceJson = js.getData() ;
+                                Toast.makeText(context, js.getMessage(), Toast.LENGTH_LONG).show();
 
-                                setList(CommonUtilities.getObjectsArrayFromJsonArray(adsArr,ProductData.class));
+
+
+                                finish();
+
+
+
+
 
                             }
                         } catch (JSONException e) {
@@ -126,23 +141,16 @@ public class ProductsActivity extends AppCompatActivity {
 
                     }
                 });
+//        AppController.getInstance().addToRequestQueue(jsObjRequest);
+
 
         requestQueue.add(jsObjRequest);
+
+
+
+
     }
 
-    void setList(ArrayList<Class> classArrayList)
-    {
-        for (int i = 0; i<classArrayList.size();i++) {
 
-            try {
-                productDataList.add( (ProductData) Class.forName(Const.ClassNameProductData).cast(classArrayList.get(i)));
-
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-
-
-        }
-        productsAdaptor.notifyDataSetChanged();
     }
-}
+

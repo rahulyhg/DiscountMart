@@ -19,12 +19,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,8 +36,6 @@ import sourabh.ichiapp.helper.Const;
 import sourabh.ichiapp.helper.JsonSeparator;
 import sourabh.ichiapp.helper.SessionManager;
 
-import static android.R.attr.id;
-import static sourabh.ichiapp.R.id.btnRegister;
 import static sourabh.ichiapp.R.id.email;
 import static sourabh.ichiapp.R.id.fname;
 import static sourabh.ichiapp.R.id.lname;
@@ -106,7 +102,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 
                     registerUser(context,AppConfig.URL_REGISTER,
-                            params,CommonUtilities.buildHeaders());
+                            params,CommonUtilities.buildGuestHeaders());
                 }
 
 
@@ -211,7 +207,7 @@ public class RegisterActivity extends AppCompatActivity {
                                         );
 
 
-
+                                gotoHome();
 
                             }
                         } catch (JSONException e) {
@@ -243,5 +239,16 @@ public class RegisterActivity extends AppCompatActivity {
 
 
 
+    }
+
+    public void gotoHome(){
+
+
+        sessionManager.setLogin(true);
+
+        Intent intent = new Intent(RegisterActivity.this,
+                HomeActivity.class);
+        startActivity(intent);
+        finish();
     }
 }

@@ -136,11 +136,20 @@ public final class CommonUtilities {
 //        return params;
 //
 //    }
-    public static Map<String,String> buildHeaders(String... strParams) {
+    public static Map<String,String> buildGuestHeaders() {
 
         HashMap<String, String> headers = new HashMap<String, String>();
 
         headers.put("Authorization", AppConfig.API_KEY_GUEST);
+        return headers;
+    }
+
+    public static Map<String,String> buildHeaders(Context contex) {
+
+        HashMap<String, String> headers = new HashMap<String, String>();
+
+
+        headers.put("Authorization", new SessionManager(contex).getAPIKEY());
         return headers;
     }
 
