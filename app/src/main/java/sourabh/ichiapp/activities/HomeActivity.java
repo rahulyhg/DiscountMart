@@ -7,6 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.LayoutInflaterCompat;
@@ -15,6 +16,7 @@ import android.support.v4.view.ViewPager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -130,14 +132,21 @@ public class HomeActivity extends AppCompatActivity
 
         if (!sessionManager.isLoggedIn()) {
             logoutUser();
+        }else{
+
+
+            GlobaDataHolder.getGlobaDataHolder().setShoppingList(
+                    new TinyDB(getApplicationContext()).getListObject(
+                            PreferenceHelper.MY_CART_LIST_LOCAL, ProductData.class));
+
+
+            updateCartCount(GlobaDataHolder.getGlobaDataHolder().getShoppingList().size());
+
+            setupDrawer();
+            getAdSliders();
         }
 
-        GlobaDataHolder.getGlobaDataHolder().setShoppingList(
-                new TinyDB(getApplicationContext()).getListObject(
-                        PreferenceHelper.MY_CART_LIST_LOCAL, ProductData.class));
 
-
-        updateCartCount(GlobaDataHolder.getGlobaDataHolder().getShoppingList().size());
 
 //        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 //        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -151,17 +160,7 @@ public class HomeActivity extends AppCompatActivity
 
 
 
-        setupDrawer();
 
-
-
-
-
-
-
-
-
-        getAdSliders();
 
     }
 
@@ -294,19 +293,23 @@ public class HomeActivity extends AppCompatActivity
         menu.clear();
         getMenuInflater().inflate(R.menu.home, menu);
 
-        MenuItem item = menu.findItem(R.id.cart_count);
-        MenuItemCompat.setActionView(item, R.layout.cart_update_count);
-        View view = MenuItemCompat.getActionView(item);
-        BtnCartCount = (Button)view.findViewById(R.id.cart_count);
-        BtnCartCount.setText(String.valueOf(cart_count));
+        if(GlobaDataHolder.getGlobaDataHolder().getShoppingList().size() > 0){
+
+            MenuItem item = menu.findItem(R.id.cart_count);
+            MenuItemCompat.setActionView(item, R.layout.cart_update_count);
+            View view = MenuItemCompat.getActionView(item);
+            BtnCartCount = (Button)view.findViewById(R.id.cart_count);
+            BtnCartCount.setText(String.valueOf(cart_count));
 
 
-        BtnCartCount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(),CartActivity.class));
-            }
-        });
+            BtnCartCount.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(getApplicationContext(),CartActivity.class));
+                }
+            });
+        }
+
 
         return true;
     }
@@ -398,13 +401,28 @@ public class HomeActivity extends AppCompatActivity
                                                 .sizeDp(24)).
                                         withIdentifier(1);
 
+
+
+        PrimaryDrawerItem profile = new PrimaryDrawerItem().
+                withName("Profile").
+                //withDescription(R.string.drawer_item_compact_header_desc).
+                        withIcon(new IconicsDrawable(this)
+                        .icon(GoogleMaterial.Icon.gmd_account_circle)
+//                                                .color(Color.RED)
+                        .sizeDp(24)).
+                        withIdentifier(3);
+
+
+
+
         SecondaryDrawerItem about_us = new SecondaryDrawerItem()
                                             .withIdentifier(2)
                                             .withName("About Us")
                 .withIcon(new IconicsDrawable(this)
                         .icon(GoogleMaterial.Icon.gmd_assignment)
 //                                                .color(Color.RED)
-                        .sizeDp(24));
+                        .sizeDp(24))
+                .withIdentifier(4);
 
 
         SecondaryDrawerItem contact_us = new SecondaryDrawerItem()
@@ -413,7 +431,20 @@ public class HomeActivity extends AppCompatActivity
                 .withIcon(new IconicsDrawable(this)
                         .icon(GoogleMaterial.Icon.gmd_contact_mail)
 //                                                .color(Color.RED)
-                        .sizeDp(24));
+                        .sizeDp(24))
+                .withIdentifier(5);
+
+
+
+        PrimaryDrawerItem logout = new PrimaryDrawerItem().
+                withName("Log Out").
+                //withDescription(R.string.drawer_item_compact_header_desc).
+                        withIcon(new IconicsDrawable(this)
+                        .icon(CommunityMaterial.Icon.cmd_logout)
+//                                                .color(Color.RED)
+                        .sizeDp(24)).
+                        withIdentifier(6).
+                        withSelectable(false);
 
 
         ExpandableDrawerItem retailers =  new ExpandableDrawerItem().withName("Retailers").
@@ -421,7 +452,7 @@ public class HomeActivity extends AppCompatActivity
                                         .icon(FontAwesome.Icon.faw_list_alt)
 //                                                .color(Color.RED)
                                         .sizeDp(24)).
-        withIdentifier(19).
+        withIdentifier(2).
                 withSelectable(false).
                 withSubItems
                         (
@@ -441,25 +472,10 @@ public class HomeActivity extends AppCompatActivity
                                         withIdentifier(2002)
                         );
 
-        PrimaryDrawerItem profile = new PrimaryDrawerItem().
-                withName("Profile").
-                //withDescription(R.string.drawer_item_compact_header_desc).
-                withIcon(new IconicsDrawable(this)
-                        .icon(GoogleMaterial.Icon.gmd_account_circle)
-//                                                .color(Color.RED)
-                        .sizeDp(24)).
-                        withIdentifier(3);
 
 
-        PrimaryDrawerItem logout = new PrimaryDrawerItem().
-                withName("Log Out").
-                //withDescription(R.string.drawer_item_compact_header_desc).
-                        withIcon(new IconicsDrawable(this)
-                        .icon(CommunityMaterial.Icon.cmd_logout)
-//                                                .color(Color.RED)
-                        .sizeDp(24)).
-                        withIdentifier(3).
-                        withSelectable(false);
+
+
 
 
         PrimaryDrawerItem retailers_home = new PrimaryDrawerItem().
@@ -469,7 +485,9 @@ public class HomeActivity extends AppCompatActivity
                         .icon(CommunityMaterial.Icon.cmd_home_variant)
 //                                                .color(Color.RED)
                         .sizeDp(24)).
-                        withIdentifier(3);
+                        withIdentifier(7);
+
+
 
         AccountHeader headerResult = new AccountHeaderBuilder()
                 .withActivity(this)
@@ -507,7 +525,67 @@ public class HomeActivity extends AppCompatActivity
                 .withShowDrawerOnFirstLaunch(true)
                 .addStickyDrawerItems(retailers_home)
 //                .withShowDrawerUntilDraggedOpened(true)
+
+
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+                        //check if the drawerItem is set.
+                        //there are different reasons for the drawerItem to be null
+                        //--> click on the header
+                        //--> click on the footer
+                        //those items don't contain a drawerItem
+
+                        if (drawerItem != null) {
+                            Intent intent = null;
+                            if (drawerItem.getIdentifier() == 1) {
+//                                intent = new Intent(HomeActivity.this, CompactHeaderDrawerActivity.class);
+                            } else if (drawerItem.getIdentifier() == 2) {
+//                                intent = new Intent(DrawerActivity.this, ActionBarActivity.class);
+                            } else if (drawerItem.getIdentifier() == 3) {
+                                intent = new Intent(HomeActivity.this, ProfileActivity.class);
+                            } else if (drawerItem.getIdentifier() == 4) {
+                                intent = new Intent(HomeActivity.this, AboutUsActivity.class);
+                            } else if (drawerItem.getIdentifier() == 5) {
+                                intent = new Intent(HomeActivity.this, ContactUsActivity.class);
+                            } else if (drawerItem.getIdentifier() == 6) {
+                                    logoutUser();
+                            } else if (drawerItem.getIdentifier() == 7) {
+//                                intent = new Intent(HomeActivity.this, FullscreenDrawerActivity.class);
+                            }
+                            if (intent != null) {
+                                HomeActivity.this.startActivity(intent);
+                            }
+                        }
+
+                        return false;
+                    }
+                })
+
+
+
+
                 .build();
 
 
-    }}
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}

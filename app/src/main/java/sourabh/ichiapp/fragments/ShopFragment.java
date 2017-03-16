@@ -176,7 +176,7 @@ public class ShopFragment extends Fragment {
                         //showAlertDialog(subcategories);
 
                         FragmentManager fm = getFragmentManager();
-                        SubCategoryDialogFragment dialogFragment = new SubCategoryDialogFragment (subcategories);
+                        SubCategoryDialogFragment dialogFragment = new SubCategoryDialogFragment (subcategories,null);
                         dialogFragment.show(fm, "Sample Fragment");
 
 
@@ -214,6 +214,8 @@ public class ShopFragment extends Fragment {
 
             try {
                 AdSliderData adSliderData = (AdSliderData) Class.forName(Const.ClassNameAdSliderData).cast(adSliderDataArrayList.get(i));
+
+               String img = adSliderData.getImage();
                 sliderShow.addSlider(new  TextSliderView(getActivity()).image(adSliderData.getImage()));
 
             } catch (ClassNotFoundException e) {

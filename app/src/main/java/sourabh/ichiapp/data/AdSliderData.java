@@ -1,5 +1,7 @@
 package sourabh.ichiapp.data;
 
+import sourabh.ichiapp.app.AppConfig;
+
 /**
  * Created by Downloader on 2/22/2017.
  */
@@ -29,7 +31,7 @@ public class AdSliderData {
     }
 
     public String getImage() {
-        return image;
+        return AppConfig.IMAGES_BASE+image;
     }
 
     public void setImage(String image) {

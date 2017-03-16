@@ -87,6 +87,9 @@ public class DiscountFragment extends Fragment {
     void showAdSlider() {
 
 
+        if(adSliderDataArrayList!= null){
+
+
         for (int i = 0; i < adSliderDataArrayList.size(); i++) {
 
             try {
@@ -98,7 +101,7 @@ public class DiscountFragment extends Fragment {
             }
 
 
-        }
+        }}
 
     }
 

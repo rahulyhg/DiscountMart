@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import sourabh.ichiapp.R;
-import sourabh.ichiapp.data.ServiceCategoriesData;
+import sourabh.ichiapp.data.ServiceCategoryData;
 import sourabh.ichiapp.helper.Const;
 
 /**
@@ -21,7 +21,7 @@ public class ServiceCategoryAdaptor extends BaseAdapter{
 
     private Context mContext;
     private ArrayList<Class> serviceCategoriesDataArrayList;
-    ServiceCategoriesData serviceCategoriesData = null;
+    ServiceCategoryData serviceCategoryData = null;
     // Constructor
     public ServiceCategoryAdaptor(Context context, ArrayList<Class> serviceCategoriesDataArrayList){
 
@@ -51,7 +51,7 @@ public class ServiceCategoryAdaptor extends BaseAdapter{
 
 
         try {
-             serviceCategoriesData = (ServiceCategoriesData) Class.forName(Const.ClassNameServiceCategoriesData).cast(serviceCategoriesDataArrayList.get(position));
+             serviceCategoryData = (ServiceCategoryData) Class.forName(Const.ClassNameServiceCategoriesData).cast(serviceCategoriesDataArrayList.get(position));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -66,7 +66,7 @@ public class ServiceCategoryAdaptor extends BaseAdapter{
             gridViewAndroid = inflater.inflate(R.layout.gridview_item, null);
             TextView textViewAndroid = (TextView) gridViewAndroid.findViewById(R.id.android_gridview_text);
           //  ImageView imageViewAndroid = (ImageView) gridViewAndroid.findViewById(R.id.android_gridview_image);
-            textViewAndroid.setText(serviceCategoriesData.getName());
+            textViewAndroid.setText(serviceCategoryData.getName());
 //            imageViewAndroid.setImageResource(gridViewImageId[i]);
 
 

@@ -1,15 +1,31 @@
 package sourabh.ichiapp.data;
 
+import java.io.Serializable;
+import java.util.List;
+
+import sourabh.ichiapp.app.AppConfig;
+
 /**
  * Created by Downloader on 2/23/2017.
  */
 
-public class ServiceCategoriesData {
+public class ServiceCategoryData implements Serializable {
 
     private Integer id;
     private String name;
     private String image;
     private Integer status;
+
+    private List<ServiceCategoryData> subcategories = null;
+
+    public List<ServiceCategoryData> getSubcategories() {
+        return subcategories;
+    }
+
+    public void setSubcategories(List<ServiceCategoryData> subcategories) {
+        this.subcategories = subcategories;
+    }
+
 
     public Integer getId() {
         return id;
@@ -28,7 +44,7 @@ public class ServiceCategoriesData {
     }
 
     public String getImage() {
-        return image;
+        return AppConfig.IMAGES_BASE+image;
     }
 
     public void setImage(String image) {

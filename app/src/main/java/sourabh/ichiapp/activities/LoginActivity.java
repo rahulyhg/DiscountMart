@@ -97,7 +97,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View v) {
 
 
-                startActivity(new Intent(getApplicationContext(),RegisterActivity.class));
+                startActivity(new Intent(LoginActivity.this,RegisterActivity.class));
 
             }
         });
@@ -111,7 +111,7 @@ public class LoginActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(con);
 
-        CustomRequest jsObjRequest   = new CustomRequest(con,false, Request.Method.POST,url, params, headers,
+        CustomRequest jsObjRequest   = new CustomRequest(LoginActivity.this,true, Request.Method.POST,url, params, headers,
 
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -192,9 +192,9 @@ public class LoginActivity extends AppCompatActivity {
     void gotoHome(){
         sessionManager.setLogin(true);
 
-//        Intent intent = new Intent(LoginActivity.this,
-//                HomeActivity.class);
-//        startActivity(intent);
+        Intent intent = new Intent(LoginActivity.this,
+                HomeActivity.class);
+        startActivity(intent);
         finish();
     }
 

@@ -26,6 +26,8 @@ import sourabh.ichiapp.R;
 import sourabh.ichiapp.adaptors.ServiceProvidersAdaptor;
 import sourabh.ichiapp.app.AppConfig;
 import sourabh.ichiapp.app.CustomRequest;
+import sourabh.ichiapp.data.GenericCategoryData;
+import sourabh.ichiapp.data.ServiceCategoryData;
 import sourabh.ichiapp.data.ServiceProviderData;
 import sourabh.ichiapp.helper.CommonUtilities;
 import sourabh.ichiapp.helper.Const;
@@ -43,7 +45,7 @@ public class ServiceProvidersActivity extends AppCompatActivity {
     private List<ServiceProviderData> serviceProviderDataList = new ArrayList<ServiceProviderData>();
     String city_id = "1";
     String category_id = "";
-
+    ServiceCategoryData serviceCategoryData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +54,12 @@ public class ServiceProvidersActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         context = getApplicationContext();
 
-        category_id = String.valueOf(this.getIntent().getIntExtra(Const.KEY_CATEGORY_ID,1));
+
+        serviceCategoryData = (ServiceCategoryData) getIntent().getExtras().getSerializable(Const.KEY_SERVICE_CATEGORY_DATA);
+
+
+        category_id = serviceCategoryData.getId().toString();
+
         city_id = "1";
 
         serviceProvidersAdaptor = new ServiceProvidersAdaptor(this, serviceProviderDataList,null);

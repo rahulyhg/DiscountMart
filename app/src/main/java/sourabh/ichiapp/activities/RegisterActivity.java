@@ -165,7 +165,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         RequestQueue requestQueue = Volley.newRequestQueue(con);
 
-        CustomRequest jsObjRequest   = new CustomRequest(con,false, Request.Method.POST, url, params, headers,
+        CustomRequest jsObjRequest   = new CustomRequest(RegisterActivity.this,true, Request.Method.POST, url, params, headers,
 
                 new Response.Listener<JSONObject>() {
                     @Override

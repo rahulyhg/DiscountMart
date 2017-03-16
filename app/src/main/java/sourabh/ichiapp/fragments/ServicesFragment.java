@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,7 @@ import sourabh.ichiapp.adaptors.ServiceCategoryAdaptor;
 import sourabh.ichiapp.app.AppConfig;
 import sourabh.ichiapp.app.CustomRequest;
 import sourabh.ichiapp.data.AdSliderData;
-import sourabh.ichiapp.data.ServiceCategoriesData;
+import sourabh.ichiapp.data.ServiceCategoryData;
 import sourabh.ichiapp.helper.CommonUtilities;
 import sourabh.ichiapp.helper.Const;
 import sourabh.ichiapp.helper.JsonSeparator;
@@ -126,7 +127,7 @@ public class ServicesFragment extends Fragment {
                                 JSONObject registerResponceJson = js.getData() ;
                                 JSONArray array =  CommonUtilities.getArrayFromJsonObj(registerResponceJson,Const.KEY_CATEGORIES);
 
-                                setServiceCategories(CommonUtilities.getObjectsArrayFromJsonArray(array,ServiceCategoriesData.class));
+                                setServiceCategories(CommonUtilities.getObjectsArrayFromJsonArray(array,ServiceCategoryData.class));
 
                             }
                         } catch (JSONException e) {
@@ -166,14 +167,29 @@ public class ServicesFragment extends Fragment {
                                     int position, long id) {
 
                 try {
-                  ServiceCategoriesData  serviceCategoriesData = (ServiceCategoriesData) Class.forName(Const.ClassNameServiceCategoriesData).cast(serviceCategoriesDataArrayList.get(position));
+                  ServiceCategoryData serviceCategoryData = (ServiceCategoryData) Class.forName(Const.ClassNameServiceCategoriesData).cast(serviceCategoriesDataArrayList.get(position));
+                    ArrayList<ServiceCategoryData> subcategories = (ArrayList<ServiceCategoryData>) serviceCategoryData.getSubcategories();
 
 
-                // Sending image id to FullScreenActivity
-                Intent i = new Intent(context, ServiceProvidersActivity.class);
-                // passing array index
-                i.putExtra(Const.KEY_CATEGORY_ID, serviceCategoriesData.getId());
-                startActivity(i);
+                    if(subcategories.size()>0){
+
+                        //showAlertDialog(subcategories);
+
+                        FragmentManager fm = getFragmentManager();
+                        SubCategoryDialogFragment dialogFragment = new SubCategoryDialogFragment (null,subcategories);
+                        dialogFragment.show(fm, "Sample Fragment");
+
+
+                    }else {
+
+                        // Sending image id to FullScreenActivity
+                        Intent i = new Intent(context, ServiceProvidersActivity.class);
+                        // passing array index
+                        i.putExtra(Const.KEY_CATEGORY_ID, serviceCategoryData.getId());
+                        startActivity(i);
+                    }
+
+
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }

@@ -62,6 +62,7 @@ dependencies {
     compile 'com.mikepenz:ionicons-typeface:2.0.1.2@aar'
 
 
+    compile 'com.github.medyo:android-about-page:1.2'
 
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'

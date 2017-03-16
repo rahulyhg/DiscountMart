@@ -31,8 +31,12 @@
         <activity android:name=".activities.RetailerProfileAndCouponActivity" />
         <activity android:name=".activities.ProductsActivity" />
         <activity android:name=".activities.CartActivity" />
-        <activity android:name=".activities.AddAddressActivity"
-            android:theme="@android:style/Theme.Dialog" ></activity>
+        <activity
+            android:name=".activities.AddAddressActivity"
+            android:theme="@android:style/Theme.Dialog" />
+        <activity android:name=".activities.AboutUsActivity" />
+        <activity android:name=".activities.ContactUsActivity" />
+        <activity android:name=".activities.ProfileActivity"></activity>
     </application>
 
 </manifest>

@@ -6,8 +6,10 @@ public class AppConfig {
 
 	// Server user register url
 //	public static String BASE = "http://mindwingstech.com/LifeLine/services/v1/";
-	public static String BASE = "http://192.168.1.100/ichiapp_web/v1/";
+//	public static String BASE = "http://192.168.1.100/ichiapp_web/v1/";
+	public static String IMAGES_BASE = "http://aws-bitnami-server.bitnamiapp.com/discountmart_web/images";
 
+	public static String BASE = "http://aws-bitnami-server.bitnamiapp.com/discountmart_web/v1/";
 	public static String URL_GET_CITIES = BASE + "get_cities/";
 	public static String URL_REGISTER = BASE + "register";
 	public static String URL_LOGIN = BASE + "login";

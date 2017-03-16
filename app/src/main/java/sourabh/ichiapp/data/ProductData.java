@@ -1,5 +1,7 @@
 package sourabh.ichiapp.data;
 
+import sourabh.ichiapp.app.AppConfig;
+
 /**
  * Created by Sourabh on 3/6/2017.
  */
@@ -52,7 +54,7 @@ public class ProductData {
     }
 
     public String getImage() {
-        return image;
+        return AppConfig.IMAGES_BASE+image;
     }
 
     public void setImage(String image) {

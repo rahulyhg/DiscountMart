@@ -1,5 +1,7 @@
 package sourabh.ichiapp.data;
 
+import sourabh.ichiapp.app.AppConfig;
+
 import static android.R.attr.banner;
 
 public class ServiceProviderData {
@@ -19,7 +21,7 @@ public class ServiceProviderData {
     private String description;
 
     public String getBanner() {
-        return banner;
+        return AppConfig.IMAGES_BASE+banner;
     }
 
     public void setBanner(String banner) {
@@ -83,7 +85,7 @@ public class ServiceProviderData {
     }
 
     public String getImage() {
-        return image;
+        return AppConfig.IMAGES_BASE+image;
     }
 
     public void setImage(String image) {
