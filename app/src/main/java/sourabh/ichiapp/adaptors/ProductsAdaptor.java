@@ -2,6 +2,8 @@ package sourabh.ichiapp.adaptors;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.text.Html;
 import android.text.Spannable;
 import android.text.Spanned;
 import android.text.style.StrikethroughSpan;
@@ -14,17 +16,18 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
-import com.android.volley.toolbox.StringRequest;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 import sourabh.ichiapp.R;
 import sourabh.ichiapp.activities.CartActivity;
+import sourabh.ichiapp.activities.ProductActivity;
 import sourabh.ichiapp.app.AppController;
 import sourabh.ichiapp.data.GlobaDataHolder;
 import sourabh.ichiapp.data.Money;
 import sourabh.ichiapp.data.ProductData;
+import sourabh.ichiapp.helper.Const;
 
 /**
  * Created by Downloader on 2/24/2017.
@@ -91,10 +94,13 @@ public class ProductsAdaptor extends BaseAdapter {
         NetworkImageView thumbNail = (NetworkImageView) convertView
                 .findViewById(R.id.product_thumb);
         TextView txtName = (TextView) convertView.findViewById(R.id.item_name);
-        TextView txtDescription = (TextView) convertView.findViewById(R.id.item_short_desc);
+//        TextView txtDescription = (TextView) convertView.findViewById(R.id.item_short_desc);
 
 
         TextView txtPrice = (TextView) convertView.findViewById(R.id.item_price);
+
+        TextView txtMemberPrice = (TextView) convertView.findViewById(R.id.item_member_price);
+
         TextView txtAddItem = (TextView) convertView.findViewById(R.id.add_item);
         final TextView txtItemAmount = (TextView) convertView.findViewById(R.id.item_amount);
 
@@ -115,10 +121,17 @@ public class ProductsAdaptor extends BaseAdapter {
                 BigDecimal.valueOf(Double.valueOf(m.getPrice()
                 ))).toString();
 
+        String member_price = Money.rupees(
+                BigDecimal.valueOf(Double.valueOf(m.getMemberPrice()
+                ))).toString();
+
+         member_price = "<font color='"+context.getResources().getColor(R.color.colorPrimary)+"'>"+member_price+"</font>";
+
+
         String costString = discounted_price+"   "+ mrp;
 
         txtPrice.setText(costString, TextView.BufferType.SPANNABLE);
-
+        txtMemberPrice.setText(Html.fromHtml(member_price), TextView.BufferType.SPANNABLE);
 
         Spannable spannable = (Spannable) txtPrice.getText();
 
@@ -128,10 +141,10 @@ public class ProductsAdaptor extends BaseAdapter {
 
 
         // thumbnail image
-        thumbNail.setImageUrl(m.getImage(), imageLoader);
+        thumbNail.setImageUrl(m.getImage1(), imageLoader);
 
         txtName.setText(name);
-        txtDescription.setText(description);
+//        txtDescription.setText(description);
 
         if (GlobaDataHolder.getGlobaDataHolder()
                 .getShoppingList().contains(m)) {
@@ -142,6 +155,26 @@ public class ProductsAdaptor extends BaseAdapter {
                             .getShoppingList().indexOf(m)).getQuantity());
 
         }
+
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                activity.startActivity(new Intent(activity, ProductActivity.class).putExtra(Const.KEY_PRODUCT_DATA,productsDataList.get(position)));
+            }
+        });
+
+
+        if(isCart){
+
+            txtAddItem.setVisibility(View.VISIBLE);
+            txtRemoveItem.setVisibility(View.VISIBLE);
+            txtItemAmount.setVisibility(View.VISIBLE);
+
+
+        }
+
+// Commented to hide plus minus buttons functionality
 
 
         txtAddItem.setOnClickListener(new View.OnClickListener() {

@@ -1,8 +1,14 @@
 package sourabh.ichiapp.activities;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -27,10 +33,13 @@ import sourabh.ichiapp.adaptors.ProductsAdaptor;
 import sourabh.ichiapp.app.AppConfig;
 import sourabh.ichiapp.app.CustomRequest;
 import sourabh.ichiapp.data.GenericCategoryData;
+import sourabh.ichiapp.data.GlobaDataHolder;
 import sourabh.ichiapp.data.ProductData;
 import sourabh.ichiapp.helper.CommonUtilities;
 import sourabh.ichiapp.helper.Const;
 import sourabh.ichiapp.helper.JsonSeparator;
+
+import static sourabh.ichiapp.R.id.cart_count;
 
 public class ProductsActivity extends AppCompatActivity {
 
@@ -46,7 +55,8 @@ public class ProductsActivity extends AppCompatActivity {
     String retailer_id = "1";
     String category_id = "",offer_image="";
     GenericCategoryData genericCategoryData;
-
+    Button BtnCartCount;
+    String product_cart_count;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +80,7 @@ public class ProductsActivity extends AppCompatActivity {
         listView.setAdapter(productsAdaptor);
 
         getProducts(category_id,retailer_id);
+        updateCartCount(GlobaDataHolder.getGlobaDataHolder().getShoppingList().size());
 
 
     }
@@ -100,6 +111,8 @@ public class ProductsActivity extends AppCompatActivity {
                             }else{
 
                                 JSONObject registerResponceJson = js.getData() ;
+
+
                                 JSONArray adsArr =  CommonUtilities.getArrayFromJsonObj(registerResponceJson, Const.KEY_PRODUCTS);
 
                                 setList(CommonUtilities.getObjectsArrayFromJsonArray(adsArr,ProductData.class));
@@ -145,4 +158,67 @@ public class ProductsActivity extends AppCompatActivity {
         }
         productsAdaptor.notifyDataSetChanged();
     }
+
+
+
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+//        getMenuInflater().inflate(R.menu.home, menu);
+//        return true;
+
+        menu.clear();
+        getMenuInflater().inflate(R.menu.product, menu);
+
+        if (GlobaDataHolder.getGlobaDataHolder().getShoppingList().size() > 0) {
+
+            MenuItem item = menu.findItem(R.id.product_menu_cart_count);
+            MenuItemCompat.setActionView(item, R.layout.cart_update_count);
+            View view = MenuItemCompat.getActionView(item);
+            BtnCartCount = (Button)view.findViewById(R.id.btn_cart_count);
+            BtnCartCount.setText(String.valueOf(product_cart_count));
+
+
+            BtnCartCount.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    startActivity(new Intent(getApplicationContext(), CartActivity.class));
+                }
+            });
+        }
+
+
+        return true;
+    }
+
+    private void updateCartCount(int count) {
+        product_cart_count = count + "";
+        supportInvalidateOptionsMenu();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == cart_count) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        updateCartCount(GlobaDataHolder.getGlobaDataHolder().getShoppingList().size());
+
+    }
+
 }

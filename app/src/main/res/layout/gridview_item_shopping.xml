@@ -7,13 +7,13 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp" />
+        android:layout_height="@dimen/shopping_gridview_height" />
 
 
     <ImageView
         android:id="@+id/imageview_grid_item"
         android:layout_width="fill_parent"
-        android:layout_height="150dp"
+        android:layout_height="@dimen/shopping_gridview_height"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:scaleType="fitXY"
@@ -24,7 +24,7 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="@dimen/shopping_gridview_height"
         android:background="@drawable/gradient_black_bg" >
     </FrameLayout>
 
@@ -42,7 +42,7 @@
         android:gravity="center|bottom"
         android:text="Hello"
         android:textColor="@color/white"
-        android:textSize="25dp"
+        android:textSize="15dp"
 
         />
 

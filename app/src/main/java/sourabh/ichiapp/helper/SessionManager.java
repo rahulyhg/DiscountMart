@@ -76,6 +76,7 @@ public class SessionManager {
 		editor.putBoolean(KEY_IS_USER_INFO_SAVED, true);
 
 
+
 		// commit changes
 		editor.commit();
 
@@ -116,6 +117,19 @@ public class SessionManager {
 	public boolean isUserInfoSaved(){
 		return pref.getBoolean(KEY_IS_USER_INFO_SAVED, false);
 	}
+
+	public boolean isMember(){
+		if(pref.getString(KEY_MEMBERSHIP,KEY_MEMBERSHIP).equals("1"))
+        {
+			return true;
+		}
+        else
+        {
+			return false;
+		}
+
+	}
+
 
 	public String getUserName(){
 		return pref.getString(KEY_FNAME,"")+" "+pref.getString(KEY_LNAME,"");

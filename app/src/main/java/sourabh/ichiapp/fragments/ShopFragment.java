@@ -176,7 +176,7 @@ public class ShopFragment extends Fragment {
                         //showAlertDialog(subcategories);
 
                         FragmentManager fm = getFragmentManager();
-                        SubCategoryDialogFragment dialogFragment = new SubCategoryDialogFragment (subcategories,null);
+                        SubCategoryDialogFragment dialogFragment = new SubCategoryDialogFragment (subcategories,null,null);
                         dialogFragment.show(fm, "Sample Fragment");
 
 

@@ -36,7 +36,8 @@
             android:theme="@android:style/Theme.Dialog" />
         <activity android:name=".activities.AboutUsActivity" />
         <activity android:name=".activities.ContactUsActivity" />
-        <activity android:name=".activities.ProfileActivity"></activity>
+        <activity android:name=".activities.ProfileActivity" />
+        <activity android:name=".activities.ProductActivity"></activity>
     </application>
 
 </manifest>

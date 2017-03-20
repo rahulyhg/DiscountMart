@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import sourabh.ichiapp.R;
 import sourabh.ichiapp.activities.RetailersActivity;
+import sourabh.ichiapp.activities.ServiceProvidersActivity;
 import sourabh.ichiapp.adaptors.GenericCategoryAdaptor;
 import sourabh.ichiapp.app.AppConfig;
 import sourabh.ichiapp.app.CustomRequest;
@@ -49,14 +51,16 @@ public class DiscountFragment extends Fragment {
     GridView gridView;
 
     ArrayList<Class> adSliderDataArrayList;
-
+    ArrayList<Class> retailerCategoriesArrayList;
     Context context;
 
 
-    public DiscountFragment(ArrayList<Class> adSliderDataArrayList) {
+    public DiscountFragment(ArrayList<Class> adSliderDataArrayList,
+                            ArrayList<Class> retailerCategoriesArrayList) {
         // Required empty public constructor
 
         this.adSliderDataArrayList = adSliderDataArrayList;
+        this.retailerCategoriesArrayList = retailerCategoriesArrayList;
 
 
     }
@@ -174,13 +178,27 @@ public class DiscountFragment extends Fragment {
                     GenericCategoryData genericCategoryData = (GenericCategoryData) Class.forName(Const.ClassNameOfferCategoryData).cast(offerCategoriesDataList.get(position));
 
 
-                    // Sending image id to FullScreenActivity
-                    Intent i = new Intent(context, RetailersActivity.class);
-                    // passing array index
+                    if(retailerCategoriesArrayList.size()>0){
 
-                    String strOfferData = CommonUtilities.getJsonStringFromObject(genericCategoryData);
-                   // i.putExtra(Const.KEY_OFFER_DATA, strOfferData);
-                    i.putExtra(Const.KEY_OFFER_DATA, genericCategoryData);
+                        //showAlertDialog(subcategories);
+
+                        FragmentManager fm = getFragmentManager();
+                        SubCategoryDialogFragment dialogFragment = new SubCategoryDialogFragment (null,null,retailerCategoriesArrayList);
+                        dialogFragment.show(fm, "Sample Fragment");
+
+
+                    }else {
+
+                        // Sending image id to FullScreenActivity
+                        Intent i = new Intent(context, RetailersActivity.class);
+                        // passing array index
+
+                        String strOfferData = CommonUtilities.getJsonStringFromObject(genericCategoryData);
+                        // i.putExtra(Const.KEY_OFFER_DATA, strOfferData);
+                        i.putExtra(Const.KEY_OFFER_DATA, genericCategoryData);
+                    }
+
+
 
 
                     startActivity(i);

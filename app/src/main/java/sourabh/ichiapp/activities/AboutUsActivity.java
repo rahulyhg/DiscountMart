@@ -23,7 +23,7 @@ public class AboutUsActivity extends AppCompatActivity {
         View aboutPage = new AboutPage(this)
 
 //                .isRTL(false)
-//                .setImage(R.drawable.)
+//                .setImage1(R.drawable.)
                 .addItem(new Element().setTitle("Version 1.0"))
 //                .addItem(new Element().setTitle("About Us Information"))
 //

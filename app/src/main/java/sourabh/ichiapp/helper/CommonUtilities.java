@@ -35,6 +35,7 @@ import java.util.Map;
 
 import sourabh.ichiapp.R;
 import sourabh.ichiapp.app.AppConfig;
+import sourabh.ichiapp.data.ProductData;
 
 import static android.R.attr.duration;
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
@@ -187,6 +188,23 @@ public final class CommonUtilities {
 
         HashMap<String, String> params = new HashMap<String, String>();
         return params;
+    }
+
+
+    public static ArrayList<String> getProductImagesFromProductData(ProductData productData){
+
+        ArrayList<String> productImages = new ArrayList<>();
+
+        if(productData.getImage1() != null){
+            productImages.add(productData.getImage1());
+        }
+        if(productData.getImage2() != null){
+            productImages.add(productData.getImage2());
+        }
+        if(productData.getImage3() != null){
+            productImages.add(productData.getImage3());
+        }
+        return productImages;
     }
 
 

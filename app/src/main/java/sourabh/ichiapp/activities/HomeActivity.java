@@ -71,6 +71,7 @@ import sourabh.ichiapp.app.CustomRequest;
 import sourabh.ichiapp.data.AdSliderData;
 import sourabh.ichiapp.data.GlobaDataHolder;
 import sourabh.ichiapp.data.ProductData;
+import sourabh.ichiapp.data.RetailerCategoryData;
 import sourabh.ichiapp.fragments.ShopFragment;
 import sourabh.ichiapp.fragments.ServicesFragment;
 import sourabh.ichiapp.fragments.DiscountFragment;
@@ -164,7 +165,10 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
-    private void setupViewPager(ViewPager viewPager, ArrayList<Class> adSliderDataArrayList) {
+    private void setupViewPager(ViewPager viewPager,
+                                ArrayList<Class> adSliderDataArrayList,
+                                ArrayList<Class> retailerCategoriesArrayList)
+    {
 
 
 
@@ -173,7 +177,7 @@ public class HomeActivity extends AppCompatActivity
 
 
         adapter.addFragment(new ShopFragment(adSliderDataArrayList), "Home Delivery Products");
-        adapter.addFragment(new DiscountFragment(adSliderDataArrayList), "Big Discount Coupons");
+        adapter.addFragment(new DiscountFragment(adSliderDataArrayList ,retailerCategoriesArrayList), "Big Discount Coupons");
         adapter.addFragment(new ServicesFragment(adSliderDataArrayList), "Service Providers");
         viewPager.setAdapter(adapter);
     }
@@ -235,7 +239,10 @@ public class HomeActivity extends AppCompatActivity
                                 JSONObject registerResponceJson = js.getData() ;
                                 JSONArray adsArr =  CommonUtilities.getArrayFromJsonObj(registerResponceJson,Const.KEY_ADS);
 
-                                setTabs(CommonUtilities.getObjectsArrayFromJsonArray(adsArr,AdSliderData.class));
+                                JSONArray retailerCatArr =  CommonUtilities.getArrayFromJsonObj(registerResponceJson,Const.KEY_RETAILER_CATEGORIES);
+
+                                setTabs(CommonUtilities.getObjectsArrayFromJsonArray(adsArr,AdSliderData.class),
+                                        CommonUtilities.getObjectsArrayFromJsonArray(retailerCatArr,RetailerCategoryData.class));
 
                             }
                         } catch (JSONException e) {
@@ -263,9 +270,10 @@ public class HomeActivity extends AppCompatActivity
         requestQueue.add(jsObjRequest);
     }
 
-    void setTabs(ArrayList<Class> adSliderDataArrayList){
+    void setTabs(ArrayList<Class> adSliderDataArrayList, ArrayList<Class> retailerCategoriesArrayList)
+    {
 
-        setupViewPager(viewPager,adSliderDataArrayList);
+        setupViewPager(viewPager,adSliderDataArrayList,retailerCategoriesArrayList);
         tabLayout.setupWithViewPager(viewPager);
     }
 
@@ -298,7 +306,7 @@ public class HomeActivity extends AppCompatActivity
             MenuItem item = menu.findItem(R.id.cart_count);
             MenuItemCompat.setActionView(item, R.layout.cart_update_count);
             View view = MenuItemCompat.getActionView(item);
-            BtnCartCount = (Button)view.findViewById(R.id.cart_count);
+            BtnCartCount = (Button)view.findViewById(R.id.btn_cart_count);
             BtnCartCount.setText(String.valueOf(cart_count));
 
 

@@ -176,7 +176,7 @@ public class ServicesFragment extends Fragment {
                         //showAlertDialog(subcategories);
 
                         FragmentManager fm = getFragmentManager();
-                        SubCategoryDialogFragment dialogFragment = new SubCategoryDialogFragment (null,subcategories);
+                        SubCategoryDialogFragment dialogFragment = new SubCategoryDialogFragment (null,subcategories,null);
                         dialogFragment.show(fm, "Sample Fragment");
 
 

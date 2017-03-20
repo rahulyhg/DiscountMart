@@ -16,6 +16,8 @@
     <dimen name="genre">13dip</dimen>
     <dimen name="year">12dip</dimen>
 
+    <dimen name="shopping_gridview_height">130dp</dimen>
+
     <dimen name="banner_width">500dp</dimen>
     <dimen name="banner_height">200dp</dimen>
 

@@ -42,7 +42,7 @@
         android:gravity="center|center"
         android:text="Hello"
         android:textColor="@color/white"
-        android:textSize="25dp"
+        android:textSize="18dp"
 
         />
 

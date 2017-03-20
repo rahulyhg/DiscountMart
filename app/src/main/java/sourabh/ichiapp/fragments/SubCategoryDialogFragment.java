@@ -24,6 +24,7 @@ import sourabh.ichiapp.R;
 import sourabh.ichiapp.activities.ProductsActivity;
 import sourabh.ichiapp.activities.ServiceProvidersActivity;
 import sourabh.ichiapp.data.GenericCategoryData;
+import sourabh.ichiapp.data.RetailerCategoryData;
 import sourabh.ichiapp.data.ServiceCategoryData;
 import sourabh.ichiapp.helper.Const;
 
@@ -35,13 +36,15 @@ public class SubCategoryDialogFragment extends DialogFragment
 {
     ArrayList<GenericCategoryData> subCategoriesGeneric = null;
     ArrayList<ServiceCategoryData>subCategoriesService = null;
+    ArrayList<Class>retailerCategoryDataArrayList = null;
 
     public SubCategoryDialogFragment(ArrayList<GenericCategoryData> subCategoriesGeneric,
-                                     ArrayList<ServiceCategoryData> subCategoriesService)
+                                     ArrayList<ServiceCategoryData> subCategoriesService,
+                                     ArrayList<Class> retailerCategoryDataArrayList)
     {
         this.subCategoriesGeneric = subCategoriesGeneric;
         this.subCategoriesService = subCategoriesService;
-
+        this.retailerCategoryDataArrayList = retailerCategoryDataArrayList;
     }
 
 
@@ -236,3 +239,79 @@ class SubCategoryGenericAdaptor extends BaseAdapter {
 
             return gridViewAndroid;
         }}
+
+
+
+class RetailerCategoryAdaptor extends BaseAdapter {
+
+    private Context mContext;
+    private List<RetailerCategoryData> retailerCategoryDataList;
+    RetailerCategoryData retailerCategoryData = null;
+
+    // Constructor
+    public RetailerCategoryAdaptor(
+            Context context,
+            List<RetailerCategoryData> retailerCategoryDataList
+    ) {
+
+        mContext = context;
+        this.retailerCategoryDataList = retailerCategoryDataList;
+    }
+
+
+    @Override
+    public int getCount() {
+        return retailerCategoryDataList.size();
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return retailerCategoryDataList.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return 0;
+    }
+
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+
+
+        try {
+            retailerCategoryData = (RetailerCategoryData) Class.forName(Const.ClassNameRetailerCategoryData).cast(retailerCategoryDataList.get(position));
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        View gridViewAndroid;
+        LayoutInflater inflater = (LayoutInflater) mContext
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        if (convertView == null) {
+
+            gridViewAndroid = new View(mContext);
+
+
+            gridViewAndroid = inflater.inflate(R.layout.gridview_item, null);
+
+            ImageView imageView = (ImageView) gridViewAndroid.findViewById(R.id.imageview_grid_item);
+            Picasso.with(mContext).load(retailerCategoryData.getImage()).fit().into(imageView);
+//
+
+
+            TextView textViewAndroid = (TextView) gridViewAndroid.findViewById(R.id.android_gridview_text);
+            textViewAndroid.setText(retailerCategoryData.getName());
+
+
+//            imageViewAndroid.setImageResource(gridViewImageId[i]);
+
+
+        } else {
+            gridViewAndroid = (View) convertView;
+        }
+
+
+        return gridViewAndroid;
+    }}

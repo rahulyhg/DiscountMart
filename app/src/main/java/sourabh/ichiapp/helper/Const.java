@@ -22,11 +22,14 @@ public class Const {
 	public static final String ClassNameAddressData = "sourabh.ichiapp.data.AddressData";
 	public static final String ClassNameGenericCategoryData = "sourabh.ichiapp.data.GenericCategoryData";
 	public static final String ClassNameServiceCategoryData = "sourabh.ichiapp.data.ServiceCategoryData";
+	public static final String ClassNameRetailerCategoryData = "sourabh.ichiapp.data.RetailerCategoryData";
 
 	public static final String GUEST_API_KEY = "guest";
 
 	public static final String KEY_USER = "user";
 	public static final String KEY_ADS = "ads";
+	public static final String KEY_RETAILER_CATEGORIES = "retailer_categories";
+
 	public static final String KEY_SERVICE_PROVIDERS = "service_providers";
 	public static final String KEY_RETAILERS = "retailers";
 	public static final String KEY_PRODUCTS = "products";
@@ -47,6 +50,7 @@ public class Const {
 	public static final String KEY_PRODUCT_CATEGORY_DATA = "product_category_data";
 	public static final String KEY_SERVICE_CATEGORY_DATA = "service_category_data";
 	public static final String KEY_SERVICE_PROVIDER_DATA = "service_provider_data";
+	public static final String KEY_PRODUCT_DATA = "product_data";
 
 	public static final String KEY_COUPON_CODE = "coupon_code";
 	public static final String KEY_COUPON = "coupon";

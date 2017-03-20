@@ -57,40 +57,41 @@
                 android:textColor="@android:color/background_dark"
                 android:textSize="15sp" />
 
-            <TextView
-                android:id="@+id/item_short_desc"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/item_name"
-                android:layout_marginTop="5dp"
-                android:ellipsize="marquee"
-                android:focusable="false"
-                android:freezesText="true"
-                android:marqueeRepeatLimit="marquee_forever"
-                android:scrollHorizontally="true"
-                android:singleLine="true"
-                android:text=" Item description"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="15sp" />
+            <!--<TextView-->
+                <!--android:id="@+id/item_short_desc"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_below="@+id/item_name"-->
+                <!--android:layout_marginTop="5dp"-->
+                <!--android:ellipsize="marquee"-->
+                <!--android:focusable="false"-->
+                <!--android:freezesText="true"-->
+                <!--android:marqueeRepeatLimit="marquee_forever"-->
+                <!--android:scrollHorizontally="true"-->
+                <!--android:singleLine="true"-->
+                <!--android:text=" Item description"-->
+                <!--android:textColor="@android:color/darker_gray"-->
+                <!--android:textSize="15sp" />-->
 
-            <TextView
-                android:id="@+id/iteam_avilable"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/item_short_desc"
-                android:layout_alignBottom="@+id/item_short_desc"
-                android:layout_alignParentRight="true"
-                android:layout_marginLeft="5dp"
-                android:ellipsize="marquee"
-                android:focusable="false"
-                android:freezesText="true"
-                android:marqueeRepeatLimit="marquee_forever"
-                android:scrollHorizontally="true"
-                android:singleLine="true"
-                android:text="Available"
-                android:textColor="#ff669900"
-                android:textSize="15sp"
-                android:visibility="gone" />
+            <!--<TextView-->
+                <!--android:id="@+id/iteam_avilable"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignBaseline="@+id/item_short_desc"-->
+                <!--android:layout_alignBottom="@+id/item_short_desc"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_marginLeft="5dp"-->
+                <!--android:ellipsize="marquee"-->
+                <!--android:focusable="false"-->
+                <!--android:freezesText="true"-->
+                <!--android:marqueeRepeatLimit="marquee_forever"-->
+                <!--android:scrollHorizontally="true"-->
+                <!--android:singleLine="true"-->
+                <!--android:text="Available"-->
+                <!--android:textColor="#ff669900"-->
+                <!--android:textSize="15sp"-->
+                <!--android:visibility="gone" />-->
+
 
             <TextView
                 android:id="@+id/item_price"
@@ -108,7 +109,29 @@
                 android:text="Rs 20"
                 android:textColor="@android:color/background_dark"
                 android:textSize="15sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                />
+
+            <TextView
+                android:id="@+id/item_member_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="marquee"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:freezesText="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:text="Rs 20"
+                android:textColor="@android:color/background_dark"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_centerVertical="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+
+                />
 
             <TextView
                 android:id="@+id/remove_item"
@@ -123,7 +146,10 @@
                 android:text="-"
                 android:textColor="#FF0000"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone"
+
+                />
 
             <TextView
                 android:id="@+id/item_amount"
@@ -144,7 +170,10 @@
                 android:singleLine="true"
                 android:text="0"
                 android:textColor="@android:color/background_dark"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:visibility="gone"
+
+                />
 
             <TextView
                 android:id="@+id/add_item"
@@ -159,7 +188,10 @@
                 android:text="+"
                 android:textColor="#ff669900"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="gone"
+
+                />
         </RelativeLayout>
     </LinearLayout>
 
