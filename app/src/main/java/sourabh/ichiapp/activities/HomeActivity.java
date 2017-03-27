@@ -71,6 +71,7 @@ import sourabh.ichiapp.app.CustomRequest;
 import sourabh.ichiapp.data.AdSliderData;
 import sourabh.ichiapp.data.GlobaDataHolder;
 import sourabh.ichiapp.data.ProductData;
+import sourabh.ichiapp.data.ProductVarientData;
 import sourabh.ichiapp.data.RetailerCategoryData;
 import sourabh.ichiapp.fragments.ShopFragment;
 import sourabh.ichiapp.fragments.ServicesFragment;
@@ -138,7 +139,7 @@ public class HomeActivity extends AppCompatActivity
 
             GlobaDataHolder.getGlobaDataHolder().setShoppingList(
                     new TinyDB(getApplicationContext()).getListObject(
-                            PreferenceHelper.MY_CART_LIST_LOCAL, ProductData.class));
+                            PreferenceHelper.MY_CART_LIST_LOCAL, ProductVarientData.class));
 
 
             updateCartCount(GlobaDataHolder.getGlobaDataHolder().getShoppingList().size());

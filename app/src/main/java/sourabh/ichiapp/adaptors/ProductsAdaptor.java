@@ -3,6 +3,8 @@ package sourabh.ichiapp.adaptors;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.Spanned;
@@ -17,7 +19,9 @@ import android.widget.TextView;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import sourabh.ichiapp.R;
@@ -27,7 +31,10 @@ import sourabh.ichiapp.app.AppController;
 import sourabh.ichiapp.data.GlobaDataHolder;
 import sourabh.ichiapp.data.Money;
 import sourabh.ichiapp.data.ProductData;
+import sourabh.ichiapp.data.ProductVarientData;
 import sourabh.ichiapp.helper.Const;
+
+import static sourabh.ichiapp.helper.Const.KEY_PRODUCT_VARIENTS_DATA;
 
 /**
  * Created by Downloader on 2/24/2017.
@@ -38,10 +45,13 @@ public class ProductsAdaptor extends BaseAdapter {
     private Activity activity;
     private LayoutInflater inflater;
     private List<ProductData> productsDataList;
+    private ArrayList<ProductVarientData> productVarientDataList =  new ArrayList<>();
+
+
+
     ImageLoader imageLoader = AppController.getInstance().getImageLoader();
     ProductData m;
     int position;
-    Boolean isCart;
     private Context context;
 
     public ProductsAdaptor(Activity activity,
@@ -50,7 +60,6 @@ public class ProductsAdaptor extends BaseAdapter {
                            Boolean isCart) {
         this.activity = activity;
         this.productsDataList = productsDataList;
-        this.isCart = isCart;
         this.context = context;
 
     }
@@ -111,18 +120,21 @@ public class ProductsAdaptor extends BaseAdapter {
         name = m.getName();
         description = m.getDescription();
 
+        productVarientDataList = (ArrayList<ProductVarientData>) m.getProduct_varients();
+        ProductVarientData firstProductVarientData = productVarientDataList.get(0);
+
 
         String mrp = Money.rupees(
-                BigDecimal.valueOf(Double.valueOf(m.getMrp()
+                BigDecimal.valueOf(Double.valueOf(firstProductVarientData.getMrp()
                         ))).toString()
                 + "  ";
 
         String discounted_price = Money.rupees(
-                BigDecimal.valueOf(Double.valueOf(m.getPrice()
+                BigDecimal.valueOf(Double.valueOf(firstProductVarientData.getPrice()
                 ))).toString();
 
         String member_price = Money.rupees(
-                BigDecimal.valueOf(Double.valueOf(m.getMemberPrice()
+                BigDecimal.valueOf(Double.valueOf(firstProductVarientData.getMember_price()
                 ))).toString();
 
          member_price = "<font color='"+context.getResources().getColor(R.color.colorPrimary)+"'>"+member_price+"</font>";
@@ -150,9 +162,9 @@ public class ProductsAdaptor extends BaseAdapter {
                 .getShoppingList().contains(m)) {
 
 
-            txtItemAmount.setText(GlobaDataHolder.getGlobaDataHolder()
-                    .getShoppingList().get(GlobaDataHolder.getGlobaDataHolder()
-                            .getShoppingList().indexOf(m)).getQuantity());
+//            txtItemAmount.setText(GlobaDataHolder.getGlobaDataHolder()
+//                    .getShoppingList().get(GlobaDataHolder.getGlobaDataHolder()
+//                            .getShoppingList().indexOf(m)).getQuantity());
 
         }
 
@@ -160,182 +172,179 @@ public class ProductsAdaptor extends BaseAdapter {
             @Override
             public void onClick(View view) {
 
-                activity.startActivity(new Intent(activity, ProductActivity.class).putExtra(Const.KEY_PRODUCT_DATA,productsDataList.get(position)));
+                Bundle args = new Bundle();
+                args.putSerializable(KEY_PRODUCT_VARIENTS_DATA,(Serializable)productVarientDataList);
+
+                activity.startActivity(new Intent(activity, ProductActivity.class)
+                            .putExtra(KEY_PRODUCT_VARIENTS_DATA, args )
+                            .putExtra(Const.KEY_PRODUCT_DATA,productsDataList.get(position)));
             }
         });
 
 
-        if(isCart){
-
-            txtAddItem.setVisibility(View.VISIBLE);
-            txtRemoveItem.setVisibility(View.VISIBLE);
-            txtItemAmount.setVisibility(View.VISIBLE);
-
-
-        }
 
 // Commented to hide plus minus buttons functionality
 
 
-        txtAddItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                txtItemAmount.setText(String.valueOf(Integer.parseInt(txtItemAmount.getText().toString())+1));
-
-
-                ProductData tempObj = (productsDataList).get(position);
-
-                //current object
-
-
-                //if current object is lready in shopping list
-                if (GlobaDataHolder.getGlobaDataHolder()
-                        .getShoppingList().contains(tempObj)) {
-
-
-                    //get position of current item in shopping list
-                    int indexOfTempInShopingList = GlobaDataHolder
-                            .getGlobaDataHolder().getShoppingList()
-                            .indexOf(tempObj);
-
-                    // increase quantity of current item in shopping list
-                    if (Integer.parseInt(tempObj.getQuantity()) == 0) {
-
-//                        ((ECartHomeActivity) getContext())
-//                                .updateItemCount(true);
-
-                    }
-
-
-                    // update quanity in shopping list
-                    GlobaDataHolder
-                            .getGlobaDataHolder()
-                            .getShoppingList()
-                            .get(indexOfTempInShopingList)
-                            .setQuantity(
-                                    String.valueOf(Integer
-                                            .valueOf(tempObj
-                                                    .getQuantity()) + 1));
-
-
-                    //update checkout amount
-                    if(isCart){
-
-                        ((CartActivity) getContext()).updateCheckOutAmount(
-                                BigDecimal
-                                        .valueOf(Double
-                                                .valueOf(m
-                                                        .getPrice())),
-
-                                BigDecimal.valueOf((m.getMrp()-(m.getPrice()))),
-
-
-                                true);
-                    }
-
-
-                    // update current item quanitity
-//                    holder.quanitity.setText(m.getQuantity());
-
-                } else {
-
-//                    ((ECartHomeActivity) getContext()).updateItemCount(true);
-
-                    tempObj.setQuantity(String.valueOf(1));
-
-//                    holder.quanitity.setText(m.getQuantity());
-
-                    GlobaDataHolder.getGlobaDataHolder()
-                            .getShoppingList().add(tempObj);
-
-                    if(isCart) {
-
-
-                        ((CartActivity) getContext()).updateCheckOutAmount(
-                                BigDecimal
-                                        .valueOf(Double
-                                                .valueOf(m
-                                                        .getPrice())),
-                                BigDecimal.valueOf((m.getMrp()-(m.getPrice()))),
-
-                                true);
-
-                    }
-                }
-
-
-
-
-            }
-        });
-
-        txtRemoveItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                txtItemAmount.setText(String.valueOf(Integer.parseInt(txtItemAmount.getText().toString())-1));
-
-
-
-                ProductData tempObj = (productsDataList).get(position);
-
-                if (GlobaDataHolder.getGlobaDataHolder().getShoppingList()
-                        .contains(tempObj)) {
-
-                    int indexOfTempInShopingList = GlobaDataHolder
-                            .getGlobaDataHolder().getShoppingList()
-                            .indexOf(tempObj);
-
-                    if (Integer.valueOf(tempObj.getQuantity()) != 0) {
-
-                        GlobaDataHolder
-                                .getGlobaDataHolder()
-                                .getShoppingList()
-                                .get(indexOfTempInShopingList)
-                                .setQuantity(
-                                        String.valueOf(Integer.valueOf(tempObj
-                                                .getQuantity()) - 1));
-
-                        if(isCart) {
-                            ((CartActivity) getContext()).updateCheckOutAmount(
-                                    BigDecimal
-                                            .valueOf(Double
-                                                    .valueOf(m
-                                                            .getPrice())),
-                                    BigDecimal.valueOf((m.getMrp()-(m.getPrice()))),
-
-                                    false);
-                        }
+//        txtAddItem.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
 //
-//                        holder.quanitity.setText(GlobaDataHolder
+//                txtItemAmount.setText(String.valueOf(Integer.parseInt(txtItemAmount.getText().toString())+1));
+//
+//
+//                ProductData tempObj = (productsDataList).get(position);
+//
+//                //current object
+//
+//
+//                //if current object is lready in shopping list
+//                if (GlobaDataHolder.getGlobaDataHolder()
+//                        .getShoppingList().contains(tempObj)) {
+//
+//
+//                    //get position of current item in shopping list
+//                    int indexOfTempInShopingList = GlobaDataHolder
+//                            .getGlobaDataHolder().getShoppingList()
+//                            .indexOf(tempObj);
+//
+//                    // increase quantity of current item in shopping list
+//                    if (Integer.parseInt(tempObj.getQuantity()) == 0) {
+//
+////                        ((ECartHomeActivity) getContext())
+////                                .updateItemCount(true);
+//
+//                    }
+//
+//
+//                    // update quanity in shopping list
+//                    GlobaDataHolder
+//                            .getGlobaDataHolder()
+//                            .getShoppingList()
+//                            .get(indexOfTempInShopingList)
+//                            .setQuantity(
+//                                    String.valueOf(Integer
+//                                            .valueOf(tempObj
+//                                                    .getQuantity()) + 1));
+//
+//
+//                    //update checkout amount
+//                    if(isCart){
+//
+//                        ((CartActivity) getContext()).updateCheckOutAmount(
+//                                BigDecimal
+//                                        .valueOf(Double
+//                                                .valueOf(m
+//                                                        .getPrice())),
+//
+//                                BigDecimal.valueOf((m.getMrp()-(m.getPrice()))),
+//
+//
+//                                true);
+//                    }
+//
+//
+//                    // update current item quanitity
+////                    holder.quanitity.setText(m.getQuantity());
+//
+//                } else {
+//
+////                    ((ECartHomeActivity) getContext()).updateItemCount(true);
+//
+//                    tempObj.setQuantity(String.valueOf(1));
+//
+////                    holder.quanitity.setText(m.getQuantity());
+//
+//                    GlobaDataHolder.getGlobaDataHolder()
+//                            .getShoppingList().add(tempObj);
+//
+//                    if(isCart) {
+//
+//
+//                        ((CartActivity) getContext()).updateCheckOutAmount(
+//                                BigDecimal
+//                                        .valueOf(Double
+//                                                .valueOf(m
+//                                                        .getPrice())),
+//                                BigDecimal.valueOf((m.getMrp()-(m.getPrice()))),
+//
+//                                true);
+//
+//                    }
+//                }
+//
+//
+//
+//
+//            }
+//        });
+//
+//        txtRemoveItem.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                txtItemAmount.setText(String.valueOf(Integer.parseInt(txtItemAmount.getText().toString())-1));
+//
+//
+//
+//                ProductData tempObj = (productsDataList).get(position);
+//
+//                if (GlobaDataHolder.getGlobaDataHolder().getShoppingList()
+//                        .contains(tempObj)) {
+//
+//                    int indexOfTempInShopingList = GlobaDataHolder
+//                            .getGlobaDataHolder().getShoppingList()
+//                            .indexOf(tempObj);
+//
+//                    if (Integer.valueOf(tempObj.getQuantity()) != 0) {
+//
+//                        GlobaDataHolder
+//                                .getGlobaDataHolder()
+//                                .getShoppingList()
+//                                .get(indexOfTempInShopingList)
+//                                .setQuantity(
+//                                        String.valueOf(Integer.valueOf(tempObj
+//                                                .getQuantity()) - 1));
+//
+//                        if(isCart) {
+//                            ((CartActivity) getContext()).updateCheckOutAmount(
+//                                    BigDecimal
+//                                            .valueOf(Double
+//                                                    .valueOf(m
+//                                                            .getPrice())),
+//                                    BigDecimal.valueOf((m.getMrp()-(m.getPrice()))),
+//
+//                                    false);
+//                        }
+////
+////                        holder.quanitity.setText(GlobaDataHolder
+////                                .getGlobaDataHolder().getShoppingList()
+////                                .get(indexOfTempInShopingList).getQuantity());
+////
+////                        Utils.vibrate(getContext());
+//
+//                        if (Integer.valueOf(GlobaDataHolder
 //                                .getGlobaDataHolder().getShoppingList()
-//                                .get(indexOfTempInShopingList).getQuantity());
+//                                .get(indexOfTempInShopingList).getQuantity()) == 0) {
 //
-//                        Utils.vibrate(getContext());
-
-                        if (Integer.valueOf(GlobaDataHolder
-                                .getGlobaDataHolder().getShoppingList()
-                                .get(indexOfTempInShopingList).getQuantity()) == 0) {
-
-                            GlobaDataHolder.getGlobaDataHolder()
-                                    .getShoppingList()
-                                    .remove(indexOfTempInShopingList);
-
-                            notifyDataSetChanged();
-
-//                            ((ECartHomeActivity) getContext())
-//                                    .updateItemCount(false);
-
-                        }
-
-                    }
-
-                } else {
-
-                }
-            }
-        });
+//                            GlobaDataHolder.getGlobaDataHolder()
+//                                    .getShoppingList()
+//                                    .remove(indexOfTempInShopingList);
+//
+//                            notifyDataSetChanged();
+//
+////                            ((ECartHomeActivity) getContext())
+////                                    .updateItemCount(false);
+//
+//                        }
+//
+//                    }
+//
+//                } else {
+//
+//                }
+//            }
+//        });
 
 
 

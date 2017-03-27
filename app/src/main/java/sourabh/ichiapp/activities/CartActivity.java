@@ -32,6 +32,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import sourabh.ichiapp.R;
+import sourabh.ichiapp.adaptors.CartAdaptor;
 import sourabh.ichiapp.adaptors.ProductsAdaptor;
 import sourabh.ichiapp.app.AppConfig;
 import sourabh.ichiapp.app.CustomRequest;
@@ -40,6 +41,7 @@ import sourabh.ichiapp.data.GenericCategoryData;
 import sourabh.ichiapp.data.GlobaDataHolder;
 import sourabh.ichiapp.data.Money;
 import sourabh.ichiapp.data.ProductData;
+import sourabh.ichiapp.data.ProductVarientData;
 import sourabh.ichiapp.fragments.ItemPickerDialogFragment;
 import sourabh.ichiapp.helper.CommonUtilities;
 import sourabh.ichiapp.helper.Const;
@@ -66,8 +68,8 @@ public class CartActivity extends AppCompatActivity implements ItemPickerDialogF
 
     public static final int ADD_ADDRESS_ACTIVITY = 123456;
 
-    private ProductsAdaptor productsAdaptor;
-    private List<ProductData> productDataList = new ArrayList<ProductData>();
+    private CartAdaptor cartAdaptor;
+    private List<ProductVarientData> productVarientDataList = new ArrayList<ProductVarientData>();
 
     GenericCategoryData genericCategoryData;
     private BigDecimal checkoutAmount = new BigDecimal(BigInteger.ZERO);
@@ -83,12 +85,14 @@ public class CartActivity extends AppCompatActivity implements ItemPickerDialogF
         ButterKnife.bind(this);
         context = getApplicationContext();
 
-        productsAdaptor = new ProductsAdaptor(this, CartActivity.this, GlobaDataHolder.getGlobaDataHolder().getShoppingList(),true);
-        listView.setAdapter(productsAdaptor);
+        cartAdaptor = new CartAdaptor(this,
+                CartActivity.this,
+                GlobaDataHolder.getGlobaDataHolder().getShoppingList());
+        listView.setAdapter(cartAdaptor);
 
         txtTotalAmt.setText(Money.rupees(BigDecimal.ZERO).toString());
 
-        for (ProductData product : GlobaDataHolder.getGlobaDataHolder()
+        for (ProductVarientData product : GlobaDataHolder.getGlobaDataHolder()
                 .getShoppingList()) {
 
             updateCheckOutAmount(

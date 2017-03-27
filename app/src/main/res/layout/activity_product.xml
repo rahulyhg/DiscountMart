@@ -129,7 +129,7 @@ android:layout_marginTop="1dp"
         <LinearLayout
             android:id="@+id/product_page_soldby_rating"
             android:layout_width="fill_parent"
-            android:layout_height="75dp"
+            android:layout_height="55dp"
             android:layout_below="@id/product_page_image_layout"
             android:layout_marginLeft="6dp"
             android:layout_marginRight="6dp"
@@ -141,7 +141,7 @@ android:layout_marginTop="1dp"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_marginLeft="6dp"
-                android:layout_weight="187"
+                android:layout_weight="150"
                 android:layout_gravity="center|center"
                 android:orientation="vertical" >
 
@@ -178,7 +178,7 @@ android:layout_marginTop="1dp"
                 android:layout_width="0dp"
                 android:layout_height="fill_parent"
                 android:layout_marginRight="6dp"
-                android:layout_weight="112"
+                android:layout_weight="150"
                 android:orientation="vertical"
                 android:tag="open_review_page" >
 
@@ -186,16 +186,25 @@ android:layout_marginTop="1dp"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content" >
 
-                    <ProgressBar
-                        android:id="@+id/product_page_rating_progress_bar"
-                        style="?android:attr/progressBarStyleHorizontal"
-                        android:layout_width="75dp"
-                        android:layout_height="20dp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginTop="8dp"
+                    <!--<ProgressBar-->
+                        <!--android:id="@+id/product_page_rating_progress_bar"-->
+                        <!--style="?android:attr/progressBarStyleHorizontal"-->
+                        <!--android:layout_width="75dp"-->
+                        <!--android:layout_height="20dp"-->
+                        <!--android:layout_marginLeft="10dp"-->
+                        <!--android:layout_marginTop="8dp"-->
+                        <!--android:progress="80"-->
+                        <!--android:progressDrawable="@drawable/ratings_star_progress_drawable"-->
+                        <!--android:tag="open_review_page" />-->
+
+                    <me.zhanghai.android.materialratingbar.MaterialRatingBar
+                        android:layout_width="90dp"
+                        android:layout_height="25dp"
                         android:progress="80"
-                        android:progressDrawable="@drawable/ratings_star_progress_drawable"
-                        android:tag="open_review_page" />
+                        android:id="@+id/rateBar"
+
+                        style="@style/Widget.MaterialRatingBar.RatingBar" />
+
                 </RelativeLayout>
 
                 <TextView
@@ -454,6 +463,38 @@ android:layout_marginTop="1dp"
             </LinearLayout>
         </LinearLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center|center"
+        android:background="@drawable/product_page_view_border"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginTop="8dp"
+        android:id="@+id/chooseVarientLayout"
+        android:layout_below="@+id/product_page_price_layout"
+        >
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="10dp"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:singleLine="true"
+            android:paddingBottom="10dp"
+            android:id="@+id/txtChooseVarient"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="18dp"
+            style="@style/Widget.AppCompat.Spinner"
+
+            />
+
+        </RelativeLayout>
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -463,7 +504,7 @@ android:layout_marginTop="1dp"
     android:layout_marginRight="6dp"
     android:layout_marginTop="8dp"
     android:id="@+id/plusminus"
-    android:layout_below="@+id/product_page_price_layout"
+    android:layout_below="@+id/chooseVarientLayout"
     >
 
         <TextView

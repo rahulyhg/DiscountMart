@@ -41,7 +41,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import sourabh.ichiapp.data.ProductData;
+import sourabh.ichiapp.data.ProductVarientData;
 
 //import com.google.gson.Gson;
 
@@ -319,14 +319,14 @@ public class TinyDB {
     }
 
 
-    public ArrayList<ProductData> getListObject(String key, Class<?> mClass){
+    public ArrayList<ProductVarientData> getListObject(String key, Class<?> mClass){
     	Gson gson = new Gson();
     	
     	ArrayList<String> objStrings = getListString(key);
-    	ArrayList<ProductData> objects =  new ArrayList<ProductData>();
+    	ArrayList<ProductVarientData> objects =  new ArrayList<ProductVarientData>();
     	
     	for(String jObjString : objStrings){
-            ProductData value  = (ProductData) gson.fromJson(jObjString,  mClass);
+            ProductVarientData value  = (ProductVarientData) gson.fromJson(jObjString,  mClass);
     		objects.add(value);
     	}
     	return objects;
@@ -470,7 +470,7 @@ public class TinyDB {
     	putString(key, gson.toJson(obj));
     }
     
-    public void putListObject(String key, List<ProductData> list){
+    public void putListObject(String key, List<ProductVarientData> list){
     	checkForNullKey(key); 
     	Gson gson = new Gson();
     	ArrayList<String> objStrings = new ArrayList<String>();

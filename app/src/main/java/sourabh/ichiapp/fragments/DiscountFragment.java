@@ -196,12 +196,13 @@ public class DiscountFragment extends Fragment {
                         String strOfferData = CommonUtilities.getJsonStringFromObject(genericCategoryData);
                         // i.putExtra(Const.KEY_OFFER_DATA, strOfferData);
                         i.putExtra(Const.KEY_OFFER_DATA, genericCategoryData);
+                        startActivity(i);
+
                     }
 
 
 
 
-                    startActivity(i);
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }

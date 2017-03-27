@@ -23,13 +23,13 @@ public class GlobaDataHolder {
 
 	private ConcurrentHashMap<String, ArrayList<ProductData>> productMap = new ConcurrentHashMap<String, ArrayList<ProductData>>();
 
-	private List<ProductData> shoppingList = Collections.synchronizedList( new ArrayList<ProductData>());
+	private List<ProductVarientData> shoppingList = Collections.synchronizedList( new ArrayList<ProductVarientData>());
 
-	public List<ProductData> getShoppingList() {
+	public List<ProductVarientData> getShoppingList() {
 		return shoppingList;
 	}
 
-	public void setShoppingList(ArrayList<ProductData> getShoppingList) {
+	public void setShoppingList(ArrayList<ProductVarientData> getShoppingList) {
 		this.shoppingList = getShoppingList;
 	}
 

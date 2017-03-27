@@ -52,7 +52,7 @@ public class ProductsActivity extends AppCompatActivity {
 
     private ProductsAdaptor productsAdaptor;
     private List<ProductData> productDataList = new ArrayList<ProductData>();
-    String retailer_id = "1";
+    String distributor_id = "1";
     String category_id = "",offer_image="";
     GenericCategoryData genericCategoryData;
     Button BtnCartCount;
@@ -74,21 +74,21 @@ public class ProductsActivity extends AppCompatActivity {
         category_id = genericCategoryData.getId().toString();
         offer_image = genericCategoryData.getImage();
 
-        retailer_id = "all";
+        distributor_id = "all";
 
         productsAdaptor = new ProductsAdaptor(this,getApplicationContext(), productDataList,false);
         listView.setAdapter(productsAdaptor);
 
-        getProducts(category_id,retailer_id);
+        getProducts(category_id, distributor_id);
         updateCartCount(GlobaDataHolder.getGlobaDataHolder().getShoppingList().size());
 
 
     }
 
-    void getProducts(String category_id, String retailer_id)
+    void getProducts(String category_id, String distributor_id)
     {
 
-        String url = AppConfig.URL_GET_PRODUCTS+category_id+"/"+retailer_id;
+        String url = AppConfig.URL_GET_PRODUCTS+category_id+"/"+distributor_id;
 
 
 

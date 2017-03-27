@@ -1,5 +1,7 @@
 package sourabh.ichiapp.data;
 
+import java.util.List;
+
 /**
  * Created by Sourabh on 3/17/2017.
  */
@@ -12,6 +14,17 @@ public class RetailerCategoryData {
     private Integer position;
     private Integer status;
     private String createdOn;
+
+    private List<RetailerCategoryData> subcategories = null;
+
+    public List<RetailerCategoryData> getSubcategories() {
+        return subcategories;
+    }
+
+    public void setSubcategories(List<RetailerCategoryData> subcategories) {
+        this.subcategories = subcategories;
+    }
+
 
     public Integer getId() {
         return id;

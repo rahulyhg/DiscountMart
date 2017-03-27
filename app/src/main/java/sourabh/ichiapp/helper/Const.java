@@ -51,6 +51,7 @@ public class Const {
 	public static final String KEY_SERVICE_CATEGORY_DATA = "service_category_data";
 	public static final String KEY_SERVICE_PROVIDER_DATA = "service_provider_data";
 	public static final String KEY_PRODUCT_DATA = "product_data";
+	public static final String KEY_PRODUCT_VARIENTS_DATA = "product_varients_data";
 
 	public static final String KEY_COUPON_CODE = "coupon_code";
 	public static final String KEY_COUPON = "coupon";

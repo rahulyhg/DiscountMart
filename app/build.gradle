@@ -63,6 +63,7 @@ dependencies {
 
 
     compile 'com.github.medyo:android-about-page:1.2'
+    compile 'me.zhanghai.android.materialratingbar:library:1.0.2'
 
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
