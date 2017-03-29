@@ -32,7 +32,7 @@ import sourabh.ichiapp.R;
 import sourabh.ichiapp.adaptors.ProductsAdaptor;
 import sourabh.ichiapp.app.AppConfig;
 import sourabh.ichiapp.app.CustomRequest;
-import sourabh.ichiapp.data.GenericCategoryData;
+import sourabh.ichiapp.data.ShoppingCategoryData;
 import sourabh.ichiapp.data.GlobaDataHolder;
 import sourabh.ichiapp.data.ProductData;
 import sourabh.ichiapp.helper.CommonUtilities;
@@ -50,11 +50,14 @@ public class ProductsActivity extends AppCompatActivity {
     ListView listView;
 
 
+
+    String searchQuery = "";
+
     private ProductsAdaptor productsAdaptor;
     private List<ProductData> productDataList = new ArrayList<ProductData>();
     String distributor_id = "1";
     String category_id = "",offer_image="";
-    GenericCategoryData genericCategoryData;
+    ShoppingCategoryData shoppingCategoryData;
     Button BtnCartCount;
     String product_cart_count;
 
@@ -64,31 +67,44 @@ public class ProductsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_products);
 
         ButterKnife.bind(this);
-        context = getApplicationContext();
+        context = this;
 
 
+        searchQuery = getIntent().getStringExtra(Const.KEY_SEARCH_QUERY);
 
-        genericCategoryData = (GenericCategoryData) getIntent().getExtras().getSerializable(Const.KEY_PRODUCT_CATEGORY_DATA);
+        shoppingCategoryData = (ShoppingCategoryData) getIntent().getExtras().getSerializable(Const.KEY_PRODUCT_CATEGORY_DATA);
 
 
-        category_id = genericCategoryData.getId().toString();
-        offer_image = genericCategoryData.getImage();
+        if(shoppingCategoryData != null){
+            category_id = shoppingCategoryData.getId().toString();
+            offer_image = shoppingCategoryData.getImage();
+        }
+
 
         distributor_id = "all";
 
         productsAdaptor = new ProductsAdaptor(this,getApplicationContext(), productDataList,false);
         listView.setAdapter(productsAdaptor);
 
-        getProducts(category_id, distributor_id);
+        getProducts(category_id, distributor_id, searchQuery);
         updateCartCount(GlobaDataHolder.getGlobaDataHolder().getShoppingList().size());
 
 
     }
 
-    void getProducts(String category_id, String distributor_id)
+    void getProducts(String category_id, String distributor_id, String searchQuery)
     {
+        String url;
 
-        String url = AppConfig.URL_GET_PRODUCTS+category_id+"/"+distributor_id;
+
+        if(searchQuery != null && !searchQuery.isEmpty())
+        {
+            url = AppConfig.URL_GET_PRODUCTS+"null"+"/"+distributor_id+"/"+searchQuery;
+
+        }else{
+            url = AppConfig.URL_GET_PRODUCTS+category_id+"/"+distributor_id+"/null";
+        }
+
 
 
 
@@ -107,7 +123,8 @@ public class ProductsActivity extends AppCompatActivity {
 
                         try {
                             if(js.isError()){
-                                Toast.makeText(context, js.getMessage(), Toast.LENGTH_LONG).show();
+                                CommonUtilities.showNoDataToast(context);
+
                             }else{
 
                                 JSONObject registerResponceJson = js.getData() ;
@@ -119,7 +136,7 @@ public class ProductsActivity extends AppCompatActivity {
 
                             }
                         } catch (JSONException e) {
-                            e.printStackTrace();
+                              e.printStackTrace();
                         }
                     }
                 },
@@ -148,16 +165,27 @@ public class ProductsActivity extends AppCompatActivity {
         for (int i = 0; i<classArrayList.size();i++) {
 
             try {
-                productDataList.add( (ProductData) Class.forName(Const.ClassNameProductData).cast(classArrayList.get(i)));
 
+                ProductData tempProductData =  (ProductData) Class.forName(Const.ClassNameProductData).cast(classArrayList.get(i));
+
+                if(tempProductData.getProduct_varients().size() > 0){
+                    productDataList.add(tempProductData);
+                }
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
 
-
         }
-        productsAdaptor.notifyDataSetChanged();
+
+        if(productDataList.size() > 0){
+            productsAdaptor.notifyDataSetChanged();
+        }else{
+            CommonUtilities.showNoDataToast(context);
+        }
+
     }
+
+
 
 
 

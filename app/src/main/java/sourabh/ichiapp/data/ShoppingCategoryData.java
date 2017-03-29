@@ -1,30 +1,40 @@
 package sourabh.ichiapp.data;
 
+import java.io.Serializable;
 import java.util.List;
 
+import sourabh.ichiapp.app.AppConfig;
+
 /**
- * Created by Sourabh on 3/17/2017.
+ * Created by Downloader on 2/25/2017.
  */
 
-public class RetailerCategoryData {
+public class ShoppingCategoryData implements Serializable {
 
     private Integer id;
     private String name;
-    private String image;
     private Integer position;
     private Integer status;
     private String createdOn;
+    private String image;
 
-    private List<RetailerCategoryData> subcategories = null;
+    private List<ShoppingCategoryData> subcategories = null;
 
-    public List<RetailerCategoryData> getSubcategories() {
+    public List<ShoppingCategoryData> getSubcategories() {
         return subcategories;
     }
 
-    public void setSubcategories(List<RetailerCategoryData> subcategories) {
+    public void setSubcategories(List<ShoppingCategoryData> subcategories) {
         this.subcategories = subcategories;
     }
 
+    public String getImage() {
+        return AppConfig.IMAGES_BASE+image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 
     public Integer getId() {
         return id;
@@ -40,14 +50,6 @@ public class RetailerCategoryData {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
     }
 
     public Integer getPosition() {
@@ -73,5 +75,6 @@ public class RetailerCategoryData {
     public void setCreatedOn(String createdOn) {
         this.createdOn = createdOn;
     }
+
 
 }

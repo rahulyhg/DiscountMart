@@ -2,22 +2,16 @@ package sourabh.ichiapp.activities;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.LayoutInflaterCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -31,27 +25,21 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.Volley;
+import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.mikepenz.community_material_typeface_library.CommunityMaterial;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.iconics.IconicsDrawable;
-import com.mikepenz.iconics.context.IconicsLayoutInflater;
 import com.mikepenz.itemanimators.AlphaCrossFadeAnimator;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.holder.BadgeStyle;
 import com.mikepenz.materialdrawer.model.DividerDrawerItem;
 import com.mikepenz.materialdrawer.model.ExpandableDrawerItem;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
 import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.mikepenz.materialdrawer.model.SecondarySwitchDrawerItem;
-import com.mikepenz.materialdrawer.model.SecondaryToggleDrawerItem;
-import com.mikepenz.materialdrawer.model.SectionDrawerItem;
-import com.mikepenz.materialdrawer.model.SwitchDrawerItem;
-import com.mikepenz.materialdrawer.model.ToggleDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
@@ -70,9 +58,9 @@ import sourabh.ichiapp.app.AppConfig;
 import sourabh.ichiapp.app.CustomRequest;
 import sourabh.ichiapp.data.AdSliderData;
 import sourabh.ichiapp.data.GlobaDataHolder;
-import sourabh.ichiapp.data.ProductData;
 import sourabh.ichiapp.data.ProductVarientData;
-import sourabh.ichiapp.data.RetailerCategoryData;
+import sourabh.ichiapp.data.GenericCategoryData;
+import sourabh.ichiapp.data.ShoppingCategoryData;
 import sourabh.ichiapp.fragments.ShopFragment;
 import sourabh.ichiapp.fragments.ServicesFragment;
 import sourabh.ichiapp.fragments.DiscountFragment;
@@ -82,8 +70,6 @@ import sourabh.ichiapp.helper.JsonSeparator;
 import sourabh.ichiapp.helper.PreferenceHelper;
 import sourabh.ichiapp.helper.SessionManager;
 import sourabh.ichiapp.helper.TinyDB;
-
-import static sourabh.ichiapp.R.id.toolbar;
 
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -107,13 +93,16 @@ public class HomeActivity extends AppCompatActivity
     String cart_count;
 
     SessionManager sessionManager;
+    MaterialSearchView searchView;
 
+    int activeTab = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        searchView = (MaterialSearchView) findViewById(R.id.search_view);
 
         ButterKnife.bind(this);
         context = getApplicationContext();
@@ -146,6 +135,7 @@ public class HomeActivity extends AppCompatActivity
 
             setupDrawer();
             getAdSliders();
+            setupSearchBar();
         }
 
 
@@ -166,22 +156,7 @@ public class HomeActivity extends AppCompatActivity
 
     }
 
-    private void setupViewPager(ViewPager viewPager,
-                                ArrayList<Class> adSliderDataArrayList,
-                                ArrayList<Class> retailerCategoriesArrayList)
-    {
 
-
-
-
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-
-
-        adapter.addFragment(new ShopFragment(adSliderDataArrayList), "Home Delivery Products");
-        adapter.addFragment(new DiscountFragment(adSliderDataArrayList ,retailerCategoriesArrayList), "Big Discount Coupons");
-        adapter.addFragment(new ServicesFragment(adSliderDataArrayList), "Service Providers");
-        viewPager.setAdapter(adapter);
-    }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
@@ -240,10 +215,15 @@ public class HomeActivity extends AppCompatActivity
                                 JSONObject registerResponceJson = js.getData() ;
                                 JSONArray adsArr =  CommonUtilities.getArrayFromJsonObj(registerResponceJson,Const.KEY_ADS);
 
+                                JSONArray shoppingCatArr =  CommonUtilities.getArrayFromJsonObj(registerResponceJson,Const.KEY_SHOPPING_CATEGORIES);
                                 JSONArray retailerCatArr =  CommonUtilities.getArrayFromJsonObj(registerResponceJson,Const.KEY_RETAILER_CATEGORIES);
+                                JSONArray serviceProvidersCatArr =  CommonUtilities.getArrayFromJsonObj(registerResponceJson,Const.KEY_SERVICE_CATEGORIES);
 
                                 setTabs(CommonUtilities.getObjectsArrayFromJsonArray(adsArr,AdSliderData.class),
-                                        CommonUtilities.getObjectsArrayFromJsonArray(retailerCatArr,RetailerCategoryData.class));
+                                        CommonUtilities.getObjectsArrayFromJsonArray(retailerCatArr,GenericCategoryData.class),
+                                        CommonUtilities.getObjectsArrayFromJsonArray(serviceProvidersCatArr,GenericCategoryData.class),
+                                        CommonUtilities.getObjectsArrayFromJsonArray(shoppingCatArr,ShoppingCategoryData.class));
+
 
                             }
                         } catch (JSONException e) {
@@ -271,11 +251,40 @@ public class HomeActivity extends AppCompatActivity
         requestQueue.add(jsObjRequest);
     }
 
-    void setTabs(ArrayList<Class> adSliderDataArrayList, ArrayList<Class> retailerCategoriesArrayList)
+    void setTabs(ArrayList<Class> adSliderDataArrayList,
+                 ArrayList<Class> retailerCategoriesArrayList,
+                 ArrayList<Class> serviceProvidersCategoriesArrayList,
+                 ArrayList<Class> shoppingCategoriesArrayList
+
+    )
     {
 
-        setupViewPager(viewPager,adSliderDataArrayList,retailerCategoriesArrayList);
+        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
+
+
+        adapter.addFragment(new ShopFragment(adSliderDataArrayList,shoppingCategoriesArrayList), "Home Delivery Products");
+        adapter.addFragment(new DiscountFragment(adSliderDataArrayList ,retailerCategoriesArrayList), "Big Discount Coupons");
+        adapter.addFragment(new ServicesFragment(adSliderDataArrayList, serviceProvidersCategoriesArrayList), "Service Providers");
+        viewPager.setAdapter(adapter);
+
         tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
+            @Override
+            public void onTabSelected(TabLayout.Tab tab){
+                activeTab = tab.getPosition();
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
     }
 
     @Override
@@ -318,6 +327,9 @@ public class HomeActivity extends AppCompatActivity
                 }
             });
         }
+
+        MenuItem item = menu.findItem(R.id.action_search);
+        searchView.setMenuItem(item);
 
 
         return true;
@@ -456,30 +468,30 @@ public class HomeActivity extends AppCompatActivity
                         withSelectable(false);
 
 
-        ExpandableDrawerItem retailers =  new ExpandableDrawerItem().withName("Retailers").
-                                withIcon(new IconicsDrawable(this)
-                                        .icon(FontAwesome.Icon.faw_list_alt)
-//                                                .color(Color.RED)
-                                        .sizeDp(24)).
-        withIdentifier(2).
-                withSelectable(false).
-                withSubItems
-                        (
-                                new SecondaryDrawerItem()
-                                        .withName("CollapsableItem")
-                                        .withLevel(2)
-//                                                    .withIcon(new IconicsDrawable(this)
-//                                                            .icon(FontAwesome.Icon.faw_list_alt)
+//        ExpandableDrawerItem retailers =  new ExpandableDrawerItem().withName("Retailers").
+//                                withIcon(new IconicsDrawable(this)
+//                                        .icon(FontAwesome.Icon.faw_list_alt)
 ////                                                .color(Color.RED)
-//                                                            .sizeDp(24))
-                                        .withIdentifier(2001),
-
-                                new SecondaryDrawerItem().
-                                        withName("CollapsableItem 2").
-                                        withLevel(2).
-//                                                        withIcon(GoogleMaterial.Icon.gmd_8tracks).
-                                        withIdentifier(2002)
-                        );
+//                                        .sizeDp(24)).
+//        withIdentifier(2).
+//                withSelectable(false).
+//                withSubItems
+//                        (
+//                                new SecondaryDrawerItem()
+//                                        .withName("CollapsableItem")
+//                                        .withLevel(2)
+////                                                    .withIcon(new IconicsDrawable(this)
+////                                                            .icon(FontAwesome.Icon.faw_list_alt)
+//////                                                .color(Color.RED)
+////                                                            .sizeDp(24))
+//                                        .withIdentifier(2001),
+//
+//                                new SecondaryDrawerItem().
+//                                        withName("CollapsableItem 2").
+//                                        withLevel(2).
+////                                                        withIcon(GoogleMaterial.Icon.gmd_8tracks).
+//                                        withIdentifier(2002)
+//                        );
 
 
 
@@ -524,7 +536,7 @@ public class HomeActivity extends AppCompatActivity
                 .withItemAnimator(new AlphaCrossFadeAnimator())
                 .withAccountHeader(headerResult) //set the AccountHeader we created earlier for the header
                 .addDrawerItems(
-                            home, retailers, profile,
+                            home, profile,
                         new DividerDrawerItem(),
                         about_us, contact_us,
                          new DividerDrawerItem(),
@@ -583,6 +595,45 @@ public class HomeActivity extends AppCompatActivity
 
 
 
+    void setupSearchBar(){
+        searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+
+                if(activeTab == 0){
+                    startActivity(new Intent(HomeActivity.this,ProductsActivity.class)
+                            .putExtra(Const.KEY_SEARCH_QUERY,query));
+                }
+                else if(activeTab == 1){
+                    startActivity(new Intent(HomeActivity.this,RetailersActivity.class)
+                            .putExtra(Const.KEY_SEARCH_QUERY,query));
+                }else if(activeTab == 2){
+                    startActivity(new Intent(HomeActivity.this,ServiceProvidersActivity.class)
+                            .putExtra(Const.KEY_SEARCH_QUERY,query));
+                }
+                //Do some magic
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                //Do some magic
+                return false;
+            }
+        });
+
+        searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
+            @Override
+            public void onSearchViewShown() {
+                //Do some magic
+            }
+
+            @Override
+            public void onSearchViewClosed() {
+                //Do some magic
+            }
+        });
+    }
 
 
 

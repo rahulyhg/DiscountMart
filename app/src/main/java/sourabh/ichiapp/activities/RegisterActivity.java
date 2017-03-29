@@ -79,7 +79,7 @@ public class RegisterActivity extends AppCompatActivity {
                         CommonUtilities.validateName(txtLname).equals("OK") &&
                         CommonUtilities.validatePhoneNumberLength(txtPhone).equals("OK") &&
 
-                        CommonUtilities.validatePassword(txtPassword, txtCpassword).equals("OK")
+                        CommonUtilities.validatePassword(txtPassword, txtCpassword)
                 )
                 {
 

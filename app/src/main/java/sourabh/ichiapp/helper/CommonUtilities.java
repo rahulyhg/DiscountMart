@@ -158,7 +158,11 @@ public final class CommonUtilities {
 
         return new Gson().fromJson(jsonString, clazz);
     }
-
+    public static void showNoDataToast(Context context){
+        CommonUtilities.showShortToast(context,"No more products");
+        Activity activity = (Activity) context;
+        activity.finish();
+    }
 
 
     public static String getJsonStringFromObject(Object object) {
@@ -281,7 +285,7 @@ public final class CommonUtilities {
 
     }
 
-    public static String validatePassword(EditText password, EditText confirm){
+    public static boolean validatePassword(EditText password, EditText confirm){
 
 
         if(password.getText().toString().equals("")){
@@ -296,11 +300,11 @@ public final class CommonUtilities {
             confirm.setError("Confirmed Password doesnt match ");
 
         }else{
-            return "OK";
+            return true;
         }
 
 
-        return "";
+        return false;
 
     }
 

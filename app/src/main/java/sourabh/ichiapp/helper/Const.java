@@ -16,24 +16,26 @@ public class Const {
 
 	public static final String ClassNameAdSliderData = "sourabh.ichiapp.data.AdSliderData";
 	public static final String ClassNameServiceCategoriesData = "sourabh.ichiapp.data.ServiceCategoryData";
-	public static final String ClassNameServiceProviderData = "sourabh.ichiapp.data.ServiceProviderData";
-	public static final String ClassNameOfferCategoryData = "sourabh.ichiapp.data.GenericCategoryData";
+	public static final String ClassNameServiceProviderData = "sourabh.ichiapp.data.GenericData";
+	public static final String ClassNameOfferCategoryData = "sourabh.ichiapp.data.ShoppingCategoryData";
 	public static final String ClassNameProductData = "sourabh.ichiapp.data.ProductData";
 	public static final String ClassNameAddressData = "sourabh.ichiapp.data.AddressData";
 	public static final String ClassNameGenericCategoryData = "sourabh.ichiapp.data.GenericCategoryData";
-	public static final String ClassNameServiceCategoryData = "sourabh.ichiapp.data.ServiceCategoryData";
-	public static final String ClassNameRetailerCategoryData = "sourabh.ichiapp.data.RetailerCategoryData";
+	public static final String ClassNameShoppingCategoryData = "sourabh.ichiapp.data.ShoppingCategoryData";
 
 	public static final String GUEST_API_KEY = "guest";
 
 	public static final String KEY_USER = "user";
 	public static final String KEY_ADS = "ads";
 	public static final String KEY_RETAILER_CATEGORIES = "retailer_categories";
+	public static final String KEY_SERVICE_CATEGORIES = "service_categories";
 
 	public static final String KEY_SERVICE_PROVIDERS = "service_providers";
 	public static final String KEY_RETAILERS = "retailers";
 	public static final String KEY_PRODUCTS = "products";
 	public static final String KEY_ADDRESSES = "addresses";
+	public static final String KEY_USER_COUPON_HISTORY = "user_coupon_history";
+
 
 
 	public static final String MSG_NO_ADDRESS_AVAILABLE = "Address book is emply, please add new address.";
@@ -43,18 +45,23 @@ public class Const {
 	public static final String KEY_DATA = "data";
 	public static final String KEY_ERROR = "error";
 
-	public static final String KEY_CATEGORIES = "categories";
+	public static final String KEY_SHOPPING_CATEGORIES = "shopping_categories";
 	public static final String KEY_CATEGORY_ID = "category_id";
 	public static final String KEY_OFFER_IMAGE = "offer_image";
 	public static final String KEY_OFFER_DATA = "offer_data";
 	public static final String KEY_PRODUCT_CATEGORY_DATA = "product_category_data";
 	public static final String KEY_SERVICE_CATEGORY_DATA = "service_category_data";
+
 	public static final String KEY_SERVICE_PROVIDER_DATA = "service_provider_data";
 	public static final String KEY_PRODUCT_DATA = "product_data";
 	public static final String KEY_PRODUCT_VARIENTS_DATA = "product_varients_data";
+	public static final String KEY_GENERIC_CATEGORY_DATA = "generic_category_data";
 
 	public static final String KEY_COUPON_CODE = "coupon_code";
 	public static final String KEY_COUPON = "coupon";
+	public static final String KEY_IS_SERVICE = "is_service";
+    public static final String KEY_IS_SEARCH = "is_search";
+    public static final String KEY_SEARCH_QUERY = "search_query";
 
 	public static final String KEY_QUOTES = "quotes";
 	public static final String KEY_QUOTE = "quote";
@@ -87,6 +94,7 @@ public class Const {
 	public static final String KEY_STATUS = "status";
 	public static final String KEY_MEMBERSHIP = "membership";
 	public static final String KEY_CREATED_AT = "created_at";
+	public static final String KEY_POINTS = "points";
 
 
 

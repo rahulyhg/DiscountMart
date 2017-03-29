@@ -22,9 +22,10 @@ import java.util.List;
 
 import sourabh.ichiapp.R;
 import sourabh.ichiapp.activities.ProductsActivity;
+import sourabh.ichiapp.activities.RetailersActivity;
 import sourabh.ichiapp.activities.ServiceProvidersActivity;
 import sourabh.ichiapp.data.GenericCategoryData;
-import sourabh.ichiapp.data.RetailerCategoryData;
+import sourabh.ichiapp.data.ShoppingCategoryData;
 import sourabh.ichiapp.data.ServiceCategoryData;
 import sourabh.ichiapp.helper.Const;
 
@@ -34,17 +35,18 @@ import sourabh.ichiapp.helper.Const;
 
 public class SubCategoryDialogFragment extends DialogFragment
 {
-    ArrayList<GenericCategoryData> subCategoriesGeneric = null;
-    ArrayList<ServiceCategoryData>subCategoriesService = null;
-    ArrayList<Class>retailerCategoryDataArrayList = null;
+    ArrayList<ShoppingCategoryData> subShoppingCategoriesList = null;
+    ArrayList<GenericCategoryData> subGenericCategoriesList = null;
+    boolean isService= false;
 
-    public SubCategoryDialogFragment(ArrayList<GenericCategoryData> subCategoriesGeneric,
-                                     ArrayList<ServiceCategoryData> subCategoriesService,
-                                     ArrayList<Class> retailerCategoryDataArrayList)
+    public SubCategoryDialogFragment(ArrayList<ShoppingCategoryData> subShoppingCategoriesList,
+                                     ArrayList<GenericCategoryData> subGenericCategoriesList,
+                                     boolean isService
+    )
     {
-        this.subCategoriesGeneric = subCategoriesGeneric;
-        this.subCategoriesService = subCategoriesService;
-        this.retailerCategoryDataArrayList = retailerCategoryDataArrayList;
+        this.subShoppingCategoriesList = subShoppingCategoriesList;
+        this.subGenericCategoriesList = subGenericCategoriesList;
+        this.isService = isService;
     }
 
 
@@ -53,12 +55,12 @@ public class SubCategoryDialogFragment extends DialogFragment
         View rootView = inflater.inflate(R.layout.gridview, container, false);
         GridView gv=(GridView)rootView.findViewById(R.id.grid_view);
 
-        if(subCategoriesService == null){
+        if(subGenericCategoriesList == null){
 
-            gv.setAdapter(new SubCategoryGenericAdaptor(getActivity(), subCategoriesGeneric));
+            gv.setAdapter(new SubCategoryShoppingAdaptor(getActivity(), subShoppingCategoriesList));
 
         }else{
-            gv.setAdapter(new SubCategoryServiceAdaptor(getActivity(), subCategoriesService));
+            gv.setAdapter(new SubGenericCategoryAdaptor(getActivity(), subGenericCategoriesList));
 
         }
 
@@ -72,14 +74,23 @@ public class SubCategoryDialogFragment extends DialogFragment
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 
-                if(subCategoriesService == null){
+                if(subGenericCategoriesList == null){
 
                     Intent i = new Intent(getContext(), ProductsActivity.class);
-                    i.putExtra(Const.KEY_PRODUCT_CATEGORY_DATA, subCategoriesGeneric.get(position));
+                    i.putExtra(Const.KEY_PRODUCT_CATEGORY_DATA, subShoppingCategoriesList.get(position));
                     startActivity(i);
-                }else{
+                }
+
+
+
+                if(isService){
                     Intent i = new Intent(getContext(), ServiceProvidersActivity.class);
-                    i.putExtra(Const.KEY_SERVICE_CATEGORY_DATA, subCategoriesService.get(position));
+                    i.putExtra(Const.KEY_GENERIC_CATEGORY_DATA, subGenericCategoriesList.get(position));
+                    startActivity(i);
+                }
+                else{
+                    Intent i = new Intent(getContext(), RetailersActivity.class);
+                    i.putExtra(Const.KEY_GENERIC_CATEGORY_DATA, subGenericCategoriesList.get(position));
                     startActivity(i);
                 }
             }
@@ -89,16 +100,16 @@ public class SubCategoryDialogFragment extends DialogFragment
     }
 }
 
-class SubCategoryGenericAdaptor extends BaseAdapter {
+class SubCategoryShoppingAdaptor extends BaseAdapter {
 
     private Context mContext;
-    private List<GenericCategoryData> offerCategoriesDataArrayList;
-    GenericCategoryData offerCategoriesData = null;
+    private List<ShoppingCategoryData> offerCategoriesDataArrayList;
+    ShoppingCategoryData offerCategoriesData = null;
 
     // Constructor
-    public SubCategoryGenericAdaptor(
+    public SubCategoryShoppingAdaptor(
             Context context,
-            List<GenericCategoryData> offerCategoriesDataArrayList
+            List<ShoppingCategoryData> offerCategoriesDataArrayList
     ) {
 
         mContext = context;
@@ -127,7 +138,7 @@ class SubCategoryGenericAdaptor extends BaseAdapter {
 
 
         try {
-            offerCategoriesData = (GenericCategoryData) Class.forName(Const.ClassNameOfferCategoryData).cast(offerCategoriesDataArrayList.get(position));
+            offerCategoriesData = (ShoppingCategoryData) Class.forName(Const.ClassNameOfferCategoryData).cast(offerCategoriesDataArrayList.get(position));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -166,31 +177,31 @@ class SubCategoryGenericAdaptor extends BaseAdapter {
 
 }
 
-    class SubCategoryServiceAdaptor extends BaseAdapter {
+    class SubGenericCategoryAdaptor extends BaseAdapter {
 
         private Context mContext;
-        private List<ServiceCategoryData> serviceCategoryDataList;
-        ServiceCategoryData serviceCategoryData = null;
+        private List<GenericCategoryData> genericCategoryDataList;
+        GenericCategoryData genericCategoryData = null;
 
         // Constructor
-        public SubCategoryServiceAdaptor(
+        public SubGenericCategoryAdaptor(
                 Context context,
-                List<ServiceCategoryData> serviceCategoryDataList
+                List<GenericCategoryData> genericCategoryDataList
         ) {
 
             mContext = context;
-            this.serviceCategoryDataList = serviceCategoryDataList;
+            this.genericCategoryDataList = genericCategoryDataList;
         }
 
 
         @Override
         public int getCount() {
-            return serviceCategoryDataList.size();
+            return genericCategoryDataList.size();
         }
 
         @Override
         public Object getItem(int position) {
-            return serviceCategoryDataList.get(position);
+            return genericCategoryDataList.get(position);
         }
 
         @Override
@@ -204,7 +215,7 @@ class SubCategoryGenericAdaptor extends BaseAdapter {
 
 
             try {
-                serviceCategoryData = (ServiceCategoryData) Class.forName(Const.ClassNameServiceCategoryData).cast(serviceCategoryDataList.get(position));
+                genericCategoryData = (GenericCategoryData) Class.forName(Const.ClassNameGenericCategoryData).cast(genericCategoryDataList.get(position));
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
@@ -220,13 +231,13 @@ class SubCategoryGenericAdaptor extends BaseAdapter {
 
                 gridViewAndroid = inflater.inflate(R.layout.gridview_item, null);
 
-                ImageView imageView = (ImageView) gridViewAndroid.findViewById(R.id.imageview_grid_item);
-                Picasso.with(mContext).load(serviceCategoryData.getImage()).fit().into(imageView);
+//                ImageView imageView = (ImageView) gridViewAndroid.findViewById(R.id.imageview_grid_item);
+//                Picasso.with(mContext).load(genericCategoryData.getImage()).fit().into(imageView);
 //
 
 
                 TextView textViewAndroid = (TextView) gridViewAndroid.findViewById(R.id.android_gridview_text);
-                textViewAndroid.setText(serviceCategoryData.getName());
+                textViewAndroid.setText(genericCategoryData.getName());
 
 
 //            imageViewAndroid.setImageResource(gridViewImageId[i]);
@@ -242,76 +253,4 @@ class SubCategoryGenericAdaptor extends BaseAdapter {
 
 
 
-class RetailerCategoryAdaptor extends BaseAdapter {
 
-    private Context mContext;
-    private List<RetailerCategoryData> retailerCategoryDataList;
-    RetailerCategoryData retailerCategoryData = null;
-
-    // Constructor
-    public RetailerCategoryAdaptor(
-            Context context,
-            List<RetailerCategoryData> retailerCategoryDataList
-    ) {
-
-        mContext = context;
-        this.retailerCategoryDataList = retailerCategoryDataList;
-    }
-
-
-    @Override
-    public int getCount() {
-        return retailerCategoryDataList.size();
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return retailerCategoryDataList.get(position);
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return 0;
-    }
-
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-
-
-        try {
-            retailerCategoryData = (RetailerCategoryData) Class.forName(Const.ClassNameRetailerCategoryData).cast(retailerCategoryDataList.get(position));
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-
-        View gridViewAndroid;
-        LayoutInflater inflater = (LayoutInflater) mContext
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        if (convertView == null) {
-
-            gridViewAndroid = new View(mContext);
-
-
-            gridViewAndroid = inflater.inflate(R.layout.gridview_item, null);
-
-            ImageView imageView = (ImageView) gridViewAndroid.findViewById(R.id.imageview_grid_item);
-            Picasso.with(mContext).load(retailerCategoryData.getImage()).fit().into(imageView);
-//
-
-
-            TextView textViewAndroid = (TextView) gridViewAndroid.findViewById(R.id.android_gridview_text);
-            textViewAndroid.setText(retailerCategoryData.getName());
-
-
-//            imageViewAndroid.setImageResource(gridViewImageId[i]);
-
-
-        } else {
-            gridViewAndroid = (View) convertView;
-        }
-
-
-        return gridViewAndroid;
-    }}

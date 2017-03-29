@@ -23,11 +23,12 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import sourabh.ichiapp.R;
-import sourabh.ichiapp.adaptors.ServiceProvidersAdaptor;
+import sourabh.ichiapp.adaptors.GenericListAdaptor;
 import sourabh.ichiapp.app.AppConfig;
 import sourabh.ichiapp.app.CustomRequest;
 import sourabh.ichiapp.data.GenericCategoryData;
-import sourabh.ichiapp.data.ServiceProviderData;
+import sourabh.ichiapp.data.GenericData;
+import sourabh.ichiapp.data.ShoppingCategoryData;
 import sourabh.ichiapp.helper.CommonUtilities;
 import sourabh.ichiapp.helper.Const;
 import sourabh.ichiapp.helper.JsonSeparator;
@@ -41,11 +42,13 @@ public class RetailersActivity extends AppCompatActivity {
     ListView listView;
 
 
-    private ServiceProvidersAdaptor serviceProvidersAdaptor;
-    private List<ServiceProviderData> serviceProviderDataList = new ArrayList<ServiceProviderData>();
+    private GenericListAdaptor genericListAdaptor;
+    private List<GenericData> genericDataList = new ArrayList<GenericData>();
     String city_id = "1";
-    String category_id = "",offer_image="";
-    GenericCategoryData genericCategoryData;
+    String category_id = "";
+//            .offer_image="";
+
+    String searchQuery = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,28 +59,36 @@ public class RetailersActivity extends AppCompatActivity {
         context = getApplicationContext();
 
 
+        searchQuery = getIntent().getStringExtra(Const.KEY_SEARCH_QUERY);
 
-        genericCategoryData = (GenericCategoryData) getIntent().getExtras().getSerializable(Const.KEY_OFFER_DATA);
+        GenericCategoryData genericCategoryData = (GenericCategoryData) getIntent().getExtras().getSerializable(Const.KEY_GENERIC_CATEGORY_DATA);
 
-
-        category_id = genericCategoryData.getId().toString();
-        offer_image = genericCategoryData.getImage();
+        if(genericCategoryData != null){
+            category_id = genericCategoryData.getId().toString();
+        }
 
         city_id = "1";
 
-        serviceProvidersAdaptor = new ServiceProvidersAdaptor(this, serviceProviderDataList, genericCategoryData);
-        listView.setAdapter(serviceProvidersAdaptor);
+        genericListAdaptor = new GenericListAdaptor(this, genericDataList,false);
+        listView.setAdapter(genericListAdaptor);
 
-        getRetailers(city_id,category_id);
+        getRetailers(city_id,category_id, searchQuery);
 
 
 
     }
 
-    void getRetailers(String city_id, String category_id)
+    void getRetailers(String city_id, String category_id, String searchQuery)
     {
+        String url;
 
-        String url = AppConfig.URL_GET_RETAILERS+city_id+"/"+category_id;
+        if(searchQuery != null && !searchQuery.isEmpty())
+        {
+            url = AppConfig.URL_GET_RETAILERS+city_id+"/null/"+searchQuery;
+
+        }else{
+            url = AppConfig.URL_GET_RETAILERS+city_id+"/"+category_id+"/null";
+        }
 
 
 
@@ -102,7 +113,7 @@ public class RetailersActivity extends AppCompatActivity {
                                 JSONObject registerResponceJson = js.getData() ;
                                 JSONArray adsArr =  CommonUtilities.getArrayFromJsonObj(registerResponceJson, Const.KEY_RETAILERS);
 
-                                setList(CommonUtilities.getObjectsArrayFromJsonArray(adsArr,ServiceProviderData.class));
+                                setList(CommonUtilities.getObjectsArrayFromJsonArray(adsArr,GenericData.class));
 
                             }
                         } catch (JSONException e) {
@@ -136,7 +147,7 @@ public class RetailersActivity extends AppCompatActivity {
         for (int i = 0; i<classArrayList.size();i++) {
 
             try {
-                serviceProviderDataList.add( (ServiceProviderData) Class.forName(Const.ClassNameServiceProviderData).cast(classArrayList.get(i)));
+                genericDataList.add( (GenericData) Class.forName(Const.ClassNameServiceProviderData).cast(classArrayList.get(i)));
 
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
@@ -144,7 +155,8 @@ public class RetailersActivity extends AppCompatActivity {
 
 
         }
-        serviceProvidersAdaptor.notifyDataSetChanged();
+
+        genericListAdaptor.notifyDataSetChanged();
     }
 
 }

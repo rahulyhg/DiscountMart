@@ -10,36 +10,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import sourabh.ichiapp.R;
 import sourabh.ichiapp.activities.RetailersActivity;
-import sourabh.ichiapp.activities.ServiceProvidersActivity;
 import sourabh.ichiapp.adaptors.GenericCategoryAdaptor;
-import sourabh.ichiapp.app.AppConfig;
-import sourabh.ichiapp.app.CustomRequest;
+import sourabh.ichiapp.adaptors.GenericListAdaptor;
 import sourabh.ichiapp.data.AdSliderData;
 import sourabh.ichiapp.data.GenericCategoryData;
 import sourabh.ichiapp.helper.CommonUtilities;
 import sourabh.ichiapp.helper.Const;
-import sourabh.ichiapp.helper.JsonSeparator;
 
 
 public class DiscountFragment extends Fragment {
@@ -51,16 +37,16 @@ public class DiscountFragment extends Fragment {
     GridView gridView;
 
     ArrayList<Class> adSliderDataArrayList;
-    ArrayList<Class> retailerCategoriesArrayList;
+    ArrayList<Class> genericCategoriesArrayList;
     Context context;
 
 
     public DiscountFragment(ArrayList<Class> adSliderDataArrayList,
-                            ArrayList<Class> retailerCategoriesArrayList) {
+                            ArrayList<Class> genericCategoriesArrayList) {
         // Required empty public constructor
 
         this.adSliderDataArrayList = adSliderDataArrayList;
-        this.retailerCategoriesArrayList = retailerCategoriesArrayList;
+        this.genericCategoriesArrayList = genericCategoriesArrayList;
 
 
     }
@@ -83,7 +69,9 @@ public class DiscountFragment extends Fragment {
         showAdSlider();
         context = getActivity();
 
-        getOfferCategories();
+       /// getRetailerCategories();
+        setGenericCategories(genericCategoriesArrayList);
+
         return view;
     }
 
@@ -109,65 +97,65 @@ public class DiscountFragment extends Fragment {
 
     }
 
-    void getOfferCategories(){
-
-        String url = AppConfig.URL_GET_OFFER_CATEGORIES;
-
-
-
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
-
-        CustomRequest jsObjRequest   = new CustomRequest(context,true, Request.Method.GET, url, CommonUtilities.buildBlankParams(), CommonUtilities.buildGuestHeaders(),
-
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        JsonSeparator js = new JsonSeparator(context,response);
-
-                        //  Toast.makeText(getApplicationContext(), response.toString(), Toast.LENGTH_LONG).show();
-
-                        try {
-                            if(js.isError()){
-                                Toast.makeText(context, js.getMessage(), Toast.LENGTH_LONG).show();
-                            }else{
-
-                                JSONObject registerResponceJson = js.getData() ;
-                                JSONArray array =  CommonUtilities.getArrayFromJsonObj(registerResponceJson,Const.KEY_CATEGORIES);
-
-                                setOfferCategories(CommonUtilities.getObjectsArrayFromJsonArray(array,GenericCategoryData.class));
-
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                        try {
-                            throw new IOException("Post failed with error code " + error.getMessage());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
-
-                        Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
-
-                    }
-                });
-
-        requestQueue.add(jsObjRequest);
-    }
-
-
-    void setOfferCategories(final ArrayList<Class> offerCategoriesDataList){
+//    void getRetailerCategories(){
+//
+//        String url = AppConfig.URL_GET_ADSLIDERS;
+//
+//
+//
+//        RequestQueue requestQueue = Volley.newRequestQueue(context);
+//
+//        CustomRequest jsObjRequest   = new CustomRequest(context,true, Request.Method.GET, url, CommonUtilities.buildBlankParams(), CommonUtilities.buildGuestHeaders(),
+//
+//                new Response.Listener<JSONObject>() {
+//                    @Override
+//                    public void onResponse(JSONObject response) {
+//
+//                        JsonSeparator js = new JsonSeparator(context,response);
+//
+//                        //  Toast.makeText(getApplicationContext(), response.toString(), Toast.LENGTH_LONG).show();
+//
+//                        try {
+//                            if(js.isError()){
+//                                Toast.makeText(context, js.getMessage(), Toast.LENGTH_LONG).show();
+//                            }else{
+//
+//                                JSONObject registerResponceJson = js.getData() ;
+//                                JSONArray array =  CommonUtilities.getArrayFromJsonObj(registerResponceJson,Const.KEY_RETAILER_CATEGORIES);
+//
+//                                setGenericCategories(CommonUtilities.getObjectsArrayFromJsonArray(array,ShoppingCategoryData.class));
+//
+//                            }
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                },
+//
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//
+//                        try {
+//                            throw new IOException("Post failed with error code " + error.getMessage());
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//
+//                        Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+//
+//                    }
+//                });
+//
+//        requestQueue.add(jsObjRequest);
+//    }
 
 
-        gridView.setAdapter(new GenericCategoryAdaptor(context,offerCategoriesDataList,false));
+    void setGenericCategories(final ArrayList<Class> genericCategoriesDataList){
+
+
+        gridView.setAdapter(new GenericCategoryAdaptor(context,genericCategoriesDataList));
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -175,15 +163,16 @@ public class DiscountFragment extends Fragment {
                                     int position, long id) {
 
                 try {
-                    GenericCategoryData genericCategoryData = (GenericCategoryData) Class.forName(Const.ClassNameOfferCategoryData).cast(offerCategoriesDataList.get(position));
+                    GenericCategoryData genericCategoryData = (GenericCategoryData) Class.forName(Const.ClassNameGenericCategoryData).cast(genericCategoriesDataList.get(position));
+                    ArrayList<GenericCategoryData> subcategories = (ArrayList<GenericCategoryData>) genericCategoryData.getSubcategories();
 
 
-                    if(retailerCategoriesArrayList.size()>0){
+                    if(subcategories.size()>0){
 
                         //showAlertDialog(subcategories);
 
                         FragmentManager fm = getFragmentManager();
-                        SubCategoryDialogFragment dialogFragment = new SubCategoryDialogFragment (null,null,retailerCategoriesArrayList);
+                        SubCategoryDialogFragment dialogFragment = new SubCategoryDialogFragment (null, subcategories, false);
                         dialogFragment.show(fm, "Sample Fragment");
 
 
@@ -195,7 +184,7 @@ public class DiscountFragment extends Fragment {
 
                         String strOfferData = CommonUtilities.getJsonStringFromObject(genericCategoryData);
                         // i.putExtra(Const.KEY_OFFER_DATA, strOfferData);
-                        i.putExtra(Const.KEY_OFFER_DATA, genericCategoryData);
+                        i.putExtra(Const.KEY_GENERIC_CATEGORY_DATA, genericCategoryData);
                         startActivity(i);
 
                     }

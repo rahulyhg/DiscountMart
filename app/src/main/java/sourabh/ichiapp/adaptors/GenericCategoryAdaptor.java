@@ -5,10 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -23,28 +20,25 @@ import sourabh.ichiapp.helper.Const;
 public class GenericCategoryAdaptor extends BaseAdapter{
 
     private Context mContext;
-    private ArrayList<Class> offerCategoriesDataArrayList;
-    GenericCategoryData offerCategoriesData = null;
-    Boolean isShopping;
+    private ArrayList<Class> genericCategoriesDataArrayList;
+    GenericCategoryData genericCategoryData = null;
     // Constructor
-    public GenericCategoryAdaptor(
-            Context context,
-            ArrayList<Class> offerCategoriesDataArrayList,
-            Boolean isShopping){
+    public GenericCategoryAdaptor(Context context,
+                                  ArrayList<Class> genericCategoriesDataArrayList)
+    {
 
         mContext = context;
-        this.offerCategoriesDataArrayList =offerCategoriesDataArrayList;
-        this.isShopping = isShopping;
+        this.genericCategoriesDataArrayList = genericCategoriesDataArrayList;
     }
 
     @Override
     public int getCount() {
-        return offerCategoriesDataArrayList.size();
+        return genericCategoriesDataArrayList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return offerCategoriesDataArrayList.get(position);
+        return genericCategoriesDataArrayList.get(position);
     }
 
     @Override
@@ -59,7 +53,7 @@ public class GenericCategoryAdaptor extends BaseAdapter{
 
 
         try {
-             offerCategoriesData = (GenericCategoryData) Class.forName(Const.ClassNameOfferCategoryData).cast(offerCategoriesDataArrayList.get(position));
+             genericCategoryData = (GenericCategoryData) Class.forName(Const.ClassNameGenericCategoryData).cast(genericCategoriesDataArrayList.get(position));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -71,22 +65,10 @@ public class GenericCategoryAdaptor extends BaseAdapter{
         if (convertView == null) {
 
             gridViewAndroid = new View(mContext);
-
-            if(isShopping){
-                gridViewAndroid = inflater.inflate(R.layout.gridview_item_shopping, null);
-
-                ImageView imageView = (ImageView) gridViewAndroid.findViewById(R.id.imageview_grid_item);
-                Picasso.with(mContext).load(offerCategoriesData.getImage()).fit().into(imageView);
-//
-            }else{
-                gridViewAndroid = inflater.inflate(R.layout.gridview_item, null);
-
-            }
-
+            gridViewAndroid = inflater.inflate(R.layout.gridview_item, null);
             TextView textViewAndroid = (TextView) gridViewAndroid.findViewById(R.id.android_gridview_text);
-            textViewAndroid.setText(offerCategoriesData.getName());
-
-
+          //  ImageView imageViewAndroid = (ImageView) gridViewAndroid.findViewById(R.id.android_gridview_image);
+            textViewAndroid.setText(genericCategoryData.getName());
 //            imageViewAndroid.setImageResource(gridViewImageId[i]);
 
 

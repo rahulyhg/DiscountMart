@@ -17,6 +17,7 @@ public class AppConfig {
 	public static String URL_GET_SERVICE_CATEGORIES = BASE + "get_service_categories";
 	public static String URL_GET_OFFER_CATEGORIES = BASE + "get_offer_categories";
 	public static String URL_GET_SHOPPING_CATEGORIES = BASE + "get_shopping_categories";
+	public static String URL_GET_RETAILER_CATEGORIES = BASE + "get_retailer_categories";
 
 	public static String URL_GET_SERVICEPROVIDERS = BASE + "get_service_providers/";
 	public static String URL_GET_RETAILERS = BASE + "get_retailers/";
@@ -24,6 +25,8 @@ public class AppConfig {
 	public static String URL_VALIDATE_COUPON = BASE + "validate_coupon/";
 	public static String URL_GET_PRODUCTS = BASE + "get_products/";
 	public static String URL_GET_ADDRESSES = BASE + "get_addresses/";
+	public static String URL_GET_USER = BASE + "get_user";
+	public static String URL_GET_USER_COUPON_HISTORY = BASE + "get_user_coupon_history";
 
 
 

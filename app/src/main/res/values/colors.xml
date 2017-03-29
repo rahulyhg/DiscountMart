@@ -29,6 +29,7 @@
     <color name="lbl_name">#333333</color>
     <color name="btn_logut_bg">#ff6861</color>
     <color name="light_blue">#ff8eb4e3</color>
+    <color name="holo_blue_dark">#ff0099cc</color>
 
 
     <color name="genre">#666666</color>
@@ -38,5 +39,32 @@
     <color name="list_row_end_color">#ffffff</color>
     <color name="list_row_hover_start_color">#ebeef0</color>
     <color name="list_row_hover_end_color">#ebeef0</color>
+
+    <color name="colorPrimaryTransperent">#BF009688</color>
+    <color name="colorAccentTransperant">#B3FFC107</color>
+    <color name="colorText">#FFFFFF</color>
+    <color name="tabsScrollColorOld">#F47435</color>
+    <color name="tabsScrollColor">#FFC107</color>
+    <color name="viewColorDark">#454545</color>
+    <color name="viewColorLight">#DCDCDC</color>
+    <color name="viewColorLightTransparent">#A6DCDCDC</color>
+    <color name="colorTextdark">#000000</color>
+    <color name="colorProfileTransperent">#80000000</color>
+    <color name="colorTextLight">#838383</color>
+    <color name="colorServicesBackground">#6E6E6E</color>
+    <color name="colorBackgroundLight">#d7eaf4</color>
+    <color name="colorCardBackground">#EEEEEE</color>
+    <color name="colorStars">#969696</color>
+    <color name="colorButtonsBlackHigher">#215875</color>
+    <color name="colorButtonsBlack">#256283</color>
+    <color name="colorButtonsBlackLower">#3a718f</color>
+    <color name="colorButtonsBlackTransperant">#80454545</color>
+    <color name="colorButtonsBlackDarkTransperant">#9E454545</color>
+    <color name="colorButtonsYellow">#FFC107</color>
+    <color name="colorCrossLabelLight">#FF80AB</color>
+    <color name="colorCrossLabelDark">#FF5E95</color>
+    <color name="colorWhiteStatusBar">#d6d6d6</color>
+    <color name="floatingButtonBlue">#04A9F4</color>
+    <color name="floatingButtonPink">#FE498C</color>
 
 </resources>

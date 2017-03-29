@@ -33,14 +33,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import sourabh.ichiapp.R;
 import sourabh.ichiapp.adaptors.CartAdaptor;
-import sourabh.ichiapp.adaptors.ProductsAdaptor;
 import sourabh.ichiapp.app.AppConfig;
 import sourabh.ichiapp.app.CustomRequest;
 import sourabh.ichiapp.data.AddressData;
-import sourabh.ichiapp.data.GenericCategoryData;
+import sourabh.ichiapp.data.ShoppingCategoryData;
 import sourabh.ichiapp.data.GlobaDataHolder;
 import sourabh.ichiapp.data.Money;
-import sourabh.ichiapp.data.ProductData;
 import sourabh.ichiapp.data.ProductVarientData;
 import sourabh.ichiapp.fragments.ItemPickerDialogFragment;
 import sourabh.ichiapp.helper.CommonUtilities;
@@ -71,7 +69,7 @@ public class CartActivity extends AppCompatActivity implements ItemPickerDialogF
     private CartAdaptor cartAdaptor;
     private List<ProductVarientData> productVarientDataList = new ArrayList<ProductVarientData>();
 
-    GenericCategoryData genericCategoryData;
+    ShoppingCategoryData shoppingCategoryData;
     private BigDecimal checkoutAmount = new BigDecimal(BigInteger.ZERO);
     private BigDecimal savingAmount = new BigDecimal(BigInteger.ZERO);
 

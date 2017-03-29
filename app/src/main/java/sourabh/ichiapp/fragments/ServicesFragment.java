@@ -10,35 +10,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.Volley;
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import sourabh.ichiapp.R;
 import sourabh.ichiapp.activities.ServiceProvidersActivity;
-import sourabh.ichiapp.adaptors.ServiceCategoryAdaptor;
-import sourabh.ichiapp.app.AppConfig;
-import sourabh.ichiapp.app.CustomRequest;
+import sourabh.ichiapp.adaptors.GenericCategoryAdaptor;
 import sourabh.ichiapp.data.AdSliderData;
-import sourabh.ichiapp.data.ServiceCategoryData;
-import sourabh.ichiapp.helper.CommonUtilities;
+import sourabh.ichiapp.data.GenericCategoryData;
 import sourabh.ichiapp.helper.Const;
-import sourabh.ichiapp.helper.JsonSeparator;
 
 
 public class ServicesFragment extends Fragment {
@@ -50,6 +35,7 @@ public class ServicesFragment extends Fragment {
     GridView gridView;
 
     ArrayList<Class> adSliderDataArrayList;
+    ArrayList<Class> genericCategoriesArrayList;
 
     Context context;
 
@@ -57,10 +43,15 @@ public class ServicesFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public ServicesFragment(ArrayList<Class> adSliderDataArrayList) {
-        // Required empty public constructor
+    public ServicesFragment(ArrayList<Class> adSliderDataArrayList,
+                            ArrayList<Class> genericCategoriesArrayList)
+    {
 
-        this.adSliderDataArrayList = adSliderDataArrayList;
+            // Required empty public constructor
+
+            this.adSliderDataArrayList = adSliderDataArrayList;
+            this.genericCategoriesArrayList = genericCategoriesArrayList;
+
 
 
     }
@@ -79,7 +70,8 @@ public class ServicesFragment extends Fragment {
         showAdSlider();
         context = getActivity();
 
-        getServiceCategories();
+       // getServiceCategories();
+        setServiceCategories(genericCategoriesArrayList);
         return view;
     }
 
@@ -101,65 +93,65 @@ public class ServicesFragment extends Fragment {
 
     }
 
-    void getServiceCategories(){
-
-        String url = AppConfig.URL_GET_SERVICE_CATEGORIES;
-
-
-
-        RequestQueue requestQueue = Volley.newRequestQueue(context);
-
-        CustomRequest jsObjRequest   = new CustomRequest(context,true, Request.Method.GET, url, CommonUtilities.buildBlankParams(), CommonUtilities.buildGuestHeaders(),
-
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-
-                        JsonSeparator js = new JsonSeparator(context,response);
-
-                        //  Toast.makeText(getApplicationContext(), response.toString(), Toast.LENGTH_LONG).show();
-
-                        try {
-                            if(js.isError()){
-                                Toast.makeText(context, js.getMessage(), Toast.LENGTH_LONG).show();
-                            }else{
-
-                                JSONObject registerResponceJson = js.getData() ;
-                                JSONArray array =  CommonUtilities.getArrayFromJsonObj(registerResponceJson,Const.KEY_CATEGORIES);
-
-                                setServiceCategories(CommonUtilities.getObjectsArrayFromJsonArray(array,ServiceCategoryData.class));
-
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-
-                        try {
-                            throw new IOException("Post failed with error code " + error.getMessage());
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
-
-                        Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
-
-                    }
-                });
-
-        requestQueue.add(jsObjRequest);
-    }
-
-
-    void setServiceCategories(final ArrayList<Class> serviceCategoriesDataArrayList){
+//    void getServiceCategories(){
+//
+//        String url = AppConfig.URL_GET_SERVICE_CATEGORIES;
+//
+//
+//
+//        RequestQueue requestQueue = Volley.newRequestQueue(context);
+//
+//        CustomRequest jsObjRequest   = new CustomRequest(context,true, Request.Method.GET, url, CommonUtilities.buildBlankParams(), CommonUtilities.buildGuestHeaders(),
+//
+//                new Response.Listener<JSONObject>() {
+//                    @Override
+//                    public void onResponse(JSONObject response) {
+//
+//                        JsonSeparator js = new JsonSeparator(context,response);
+//
+//                        //  Toast.makeText(getApplicationContext(), response.toString(), Toast.LENGTH_LONG).show();
+//
+//                        try {
+//                            if(js.isError()){
+//                                Toast.makeText(context, js.getMessage(), Toast.LENGTH_LONG).show();
+//                            }else{
+//
+//                                JSONObject registerResponceJson = js.getData() ;
+//                                JSONArray array =  CommonUtilities.getArrayFromJsonObj(registerResponceJson,Const.KEY_SHOPPING_CATEGORIES);
+//
+//                                setServiceCategories(CommonUtilities.getObjectsArrayFromJsonArray(array,ServiceCategoryData.class));
+//
+//                            }
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                },
+//
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//
+//                        try {
+//                            throw new IOException("Post failed with error code " + error.getMessage());
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//
+//
+//                        Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+//
+//                    }
+//                });
+//
+//        requestQueue.add(jsObjRequest);
+//    }
 
 
-        gridView.setAdapter(new ServiceCategoryAdaptor(context,serviceCategoriesDataArrayList));
+    void setServiceCategories(final ArrayList<Class> genericCategoriesDataArrayList){
+
+
+        gridView.setAdapter(new GenericCategoryAdaptor(context,genericCategoriesDataArrayList));
 
         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -167,8 +159,8 @@ public class ServicesFragment extends Fragment {
                                     int position, long id) {
 
                 try {
-                  ServiceCategoryData serviceCategoryData = (ServiceCategoryData) Class.forName(Const.ClassNameServiceCategoriesData).cast(serviceCategoriesDataArrayList.get(position));
-                    ArrayList<ServiceCategoryData> subcategories = (ArrayList<ServiceCategoryData>) serviceCategoryData.getSubcategories();
+                  GenericCategoryData genericCategoryData = (GenericCategoryData) Class.forName(Const.ClassNameGenericCategoryData).cast(genericCategoriesDataArrayList.get(position));
+                    ArrayList<GenericCategoryData> subcategories = (ArrayList<GenericCategoryData>) genericCategoryData.getSubcategories();
 
 
                     if(subcategories.size()>0){
@@ -176,7 +168,7 @@ public class ServicesFragment extends Fragment {
                         //showAlertDialog(subcategories);
 
                         FragmentManager fm = getFragmentManager();
-                        SubCategoryDialogFragment dialogFragment = new SubCategoryDialogFragment (null,subcategories,null);
+                        SubCategoryDialogFragment dialogFragment = new SubCategoryDialogFragment (null,subcategories,true);
                         dialogFragment.show(fm, "Sample Fragment");
 
 
@@ -185,7 +177,7 @@ public class ServicesFragment extends Fragment {
                         // Sending image id to FullScreenActivity
                         Intent i = new Intent(context, ServiceProvidersActivity.class);
                         // passing array index
-                        i.putExtra(Const.KEY_CATEGORY_ID, serviceCategoryData.getId());
+                        i.putExtra(Const.KEY_CATEGORY_ID, genericCategoryData.getId());
                         startActivity(i);
                     }
 

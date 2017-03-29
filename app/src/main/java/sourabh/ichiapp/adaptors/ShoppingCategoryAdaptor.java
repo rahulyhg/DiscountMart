@@ -5,38 +5,44 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 import sourabh.ichiapp.R;
-import sourabh.ichiapp.data.ServiceCategoryData;
+import sourabh.ichiapp.data.ShoppingCategoryData;
 import sourabh.ichiapp.helper.Const;
 
 /**
  * Created by Downloader on 2/23/2017.
  */
 
-public class ServiceCategoryAdaptor extends BaseAdapter{
+public class ShoppingCategoryAdaptor extends BaseAdapter{
 
     private Context mContext;
-    private ArrayList<Class> serviceCategoriesDataArrayList;
-    ServiceCategoryData serviceCategoryData = null;
+    private ArrayList<Class> shoppingCategoriesDataArrayList;
+    ShoppingCategoryData shoppingCategories = null;
     // Constructor
-    public ServiceCategoryAdaptor(Context context, ArrayList<Class> serviceCategoriesDataArrayList){
+    public ShoppingCategoryAdaptor(
+            Context context,
+            ArrayList<Class> shoppingCategoriesDataArrayList)
+    {
 
         mContext = context;
-        this.serviceCategoriesDataArrayList=serviceCategoriesDataArrayList;
+        this.shoppingCategoriesDataArrayList = shoppingCategoriesDataArrayList;
     }
 
     @Override
     public int getCount() {
-        return serviceCategoriesDataArrayList.size();
+        return shoppingCategoriesDataArrayList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return serviceCategoriesDataArrayList.get(position);
+        return shoppingCategoriesDataArrayList.get(position);
     }
 
     @Override
@@ -51,7 +57,7 @@ public class ServiceCategoryAdaptor extends BaseAdapter{
 
 
         try {
-             serviceCategoryData = (ServiceCategoryData) Class.forName(Const.ClassNameServiceCategoriesData).cast(serviceCategoriesDataArrayList.get(position));
+             shoppingCategories = (ShoppingCategoryData) Class.forName(Const.ClassNameShoppingCategoryData).cast(shoppingCategoriesDataArrayList.get(position));
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -63,10 +69,16 @@ public class ServiceCategoryAdaptor extends BaseAdapter{
         if (convertView == null) {
 
             gridViewAndroid = new View(mContext);
-            gridViewAndroid = inflater.inflate(R.layout.gridview_item, null);
+
+                gridViewAndroid = inflater.inflate(R.layout.gridview_item_shopping, null);
+
+                ImageView imageView = (ImageView) gridViewAndroid.findViewById(R.id.imageview_grid_item);
+                Picasso.with(mContext).load(shoppingCategories.getImage()).fit().into(imageView);
+
             TextView textViewAndroid = (TextView) gridViewAndroid.findViewById(R.id.android_gridview_text);
-          //  ImageView imageViewAndroid = (ImageView) gridViewAndroid.findViewById(R.id.android_gridview_image);
-            textViewAndroid.setText(serviceCategoryData.getName());
+            textViewAndroid.setText(shoppingCategories.getName());
+
+
 //            imageViewAndroid.setImageResource(gridViewImageId[i]);
 
 

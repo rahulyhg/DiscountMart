@@ -19,7 +19,7 @@ public class GlobaDataHolder {
 		return globaDataHolder;
 	}
 
-	private ArrayList<GenericCategoryData> listOfCategory = new ArrayList<GenericCategoryData>();
+	private ArrayList<ShoppingCategoryData> listOfCategory = new ArrayList<ShoppingCategoryData>();
 
 	private ConcurrentHashMap<String, ArrayList<ProductData>> productMap = new ConcurrentHashMap<String, ArrayList<ProductData>>();
 
@@ -41,11 +41,11 @@ public class GlobaDataHolder {
 		this.productMap = productMap;
 	}
 
-	public ArrayList<GenericCategoryData> getListOfCategory() {
+	public ArrayList<ShoppingCategoryData> getListOfCategory() {
 		return listOfCategory;
 	}
 
-	public void setListOfCategory(ArrayList<GenericCategoryData> listOfCategory) {
+	public void setListOfCategory(ArrayList<ShoppingCategoryData> listOfCategory) {
 		this.listOfCategory = listOfCategory;
 	}
 

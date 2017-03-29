@@ -20,29 +20,35 @@ import java.util.List;
 import sourabh.ichiapp.R;
 import sourabh.ichiapp.activities.RetailerProfileAndCouponActivity;
 import sourabh.ichiapp.app.AppController;
-import sourabh.ichiapp.data.GenericCategoryData;
-import sourabh.ichiapp.data.ServiceProviderData;
+import sourabh.ichiapp.data.GenericData;
+import sourabh.ichiapp.data.ShoppingCategoryData;
 import sourabh.ichiapp.helper.Const;
 
 /**
  * Created by Downloader on 2/24/2017.
  */
 
-public class ServiceProvidersAdaptor extends BaseAdapter {
+public class GenericListAdaptor extends BaseAdapter {
 
     private Activity activity;
     private LayoutInflater inflater;
-    private List<ServiceProviderData> serviceProviderDataList;
+    private List<GenericData> genericDataList;
     ImageLoader imageLoader = AppController.getInstance().getImageLoader();
-    ServiceProviderData m;
-    private GenericCategoryData genericCategoryData;
+    GenericData m;
+    private ShoppingCategoryData shoppingCategoryData;
     int position;
-    public ServiceProvidersAdaptor(Activity activity,
-                                   List<ServiceProviderData> serviceProviderDataList,
-                                   GenericCategoryData genericCategoryData) {
+    boolean isService;
+    public GenericListAdaptor(Activity activity,
+                              List<GenericData> genericDataList,
+                              boolean isService
+
+
+    )
+    {
+
         this.activity = activity;
-        this.serviceProviderDataList = serviceProviderDataList;
-        this.genericCategoryData = genericCategoryData;
+        this.genericDataList = genericDataList;
+        this.isService = isService;
     }
 
 
@@ -50,12 +56,12 @@ public class ServiceProvidersAdaptor extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return serviceProviderDataList.size();
+        return genericDataList.size();
     }
 
     @Override
     public Object getItem(int location) {
-        return serviceProviderDataList.get(location);
+        return genericDataList.get(location);
     }
 
     @Override
@@ -91,7 +97,7 @@ public class ServiceProvidersAdaptor extends BaseAdapter {
 //        TextView year = (TextView) convertView.findViewById(R.id.releaseYear);
 
         // getting movie data for the row
-        m = serviceProviderDataList.get(position);
+        m = genericDataList.get(position);
 
         name = m.getName();
         address = m.getAddress();
@@ -126,10 +132,14 @@ public class ServiceProvidersAdaptor extends BaseAdapter {
                                      @Override
                                      public void onClick(View v) {
 
+
                                         Intent i = new Intent(activity, RetailerProfileAndCouponActivity.class);
 
-                                         i.putExtra(Const.KEY_RETAILERS,new Gson().toJson(serviceProviderDataList.get(position)));
-                                         i.putExtra(Const.KEY_OFFER_DATA,new Gson().toJson(genericCategoryData));
+                                         i.putExtra(Const.KEY_RETAILERS,new Gson().toJson(genericDataList.get(position)));
+
+                                         if(isService){
+                                            i.putExtra(Const.KEY_IS_SERVICE,isService);
+                                         }
                                          activity.startActivity(i);
                                      }
                                  }

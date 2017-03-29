@@ -1,13 +1,19 @@
 package sourabh.ichiapp.activities;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,8 +26,11 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
 import com.android.volley.toolbox.Volley;
+import com.daimajia.slider.library.SliderLayout;
+import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.yarolegovich.lovelydialog.LovelyStandardDialog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -36,8 +45,9 @@ import sourabh.ichiapp.R;
 import sourabh.ichiapp.app.AppConfig;
 import sourabh.ichiapp.app.AppController;
 import sourabh.ichiapp.app.CustomRequest;
-import sourabh.ichiapp.data.GenericCategoryData;
-import sourabh.ichiapp.data.ServiceProviderData;
+import sourabh.ichiapp.data.AdSliderData;
+import sourabh.ichiapp.data.ShoppingCategoryData;
+import sourabh.ichiapp.data.GenericData;
 import sourabh.ichiapp.helper.CommonUtilities;
 import sourabh.ichiapp.helper.Const;
 import sourabh.ichiapp.helper.JsonSeparator;
@@ -47,22 +57,28 @@ import static sourabh.ichiapp.R.id.phone;
 
 public class RetailerProfileAndCouponActivity extends AppCompatActivity {
 
-    @BindView(R.id.image_coupon) ImageView imageCoupon;
-    @BindView(R.id.banner) ImageView banner;
-    @BindView(R.id.thumbnail) NetworkImageView thumbnail;
-    @BindView(R.id.name) TextView txtName;
-    @BindView(address) TextView txtAddress;
-    @BindView(phone) TextView txtPhone;
-    @BindView(R.id.description) TextView description;
 
-    @BindView(R.id.imageViewDescIcon) ImageView imgdesc;
+    @BindView(R.id.name)
+    TextView txtName;
+    @BindView(address)
+    TextView txtAddress;
+    @BindView(phone)
+    TextView txtPhone;
+    @BindView(R.id.description)
+    TextView description;
+    @BindView(R.id.btnRequestCoupon)
+    Button btnRequestCoupon;
 
-    String offer_image,coupon_code,coupon_id;
 
+    //    String offer_image,
+    String coupon_code, coupon_id;
+    @BindView(R.id.slider_banner)
+    SliderLayout slider_banner;
 
     Context context;
-    GenericCategoryData genericCategoryData;
-    ServiceProviderData serviceProviderData;
+    GenericData genericData;
+
+    boolean isService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,88 +88,109 @@ public class RetailerProfileAndCouponActivity extends AppCompatActivity {
         context = getApplicationContext();
 
 
-        serviceProviderData = CommonUtilities.getObjectFromJsonString(getIntent().getStringExtra(Const.KEY_RETAILERS),ServiceProviderData.class);
-        genericCategoryData = CommonUtilities.getObjectFromJsonString(getIntent().getStringExtra(Const.KEY_OFFER_DATA),GenericCategoryData.class);
+        genericData = CommonUtilities.getObjectFromJsonString(getIntent().getStringExtra(Const.KEY_RETAILERS), GenericData.class);
 
-
-        offer_image = genericCategoryData.getImage();
-
+        isService = getIntent().getBooleanExtra(Const.KEY_IS_SERVICE, false);
         setViews();
 
 
-
-        imageCoupon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                requestCoupon();
-            }
-        });
-
-
     }
 
-    void setViews(){
 
-        String mMessage_pic_url = serviceProviderData.getBanner();
+    void setViews() {
+
+        String mMessage_pic_url = genericData.getBanner1();
 
         ImageLoader imageLoader = AppController.getInstance().getImageLoader();
 
-        Picasso.with(this.context)
-                .load(mMessage_pic_url)
-                .error(android.R.drawable.stat_notify_error)
-                .fit()
-                .placeholder( R.drawable.progress_animation )
 
-                .into(banner, new Callback() {
-                    @Override
-                    public void onSuccess() {
-
-                    }
-
-                    @Override
-                    public void onError() {
-
-                    }
-                });
-
-
-
-        txtName.setText(serviceProviderData.getName());
-        txtAddress.setText(serviceProviderData.getAddress());
-        txtPhone.setText(serviceProviderData.getPhone());
-        imgdesc.setVisibility(View.VISIBLE);
+        txtName.setText(genericData.getName());
+        txtAddress.setText(genericData.getAddress());
+        txtPhone.setText(genericData.getPhone());
         description.setVisibility(View.VISIBLE);
-        description.setText(serviceProviderData.getDescription());
-        thumbnail.setImageUrl(serviceProviderData.getImage(), imageLoader);
+        description.setText(genericData.getDescription());
 
 
-        Picasso.with(this.context)
-                .load(offer_image)
-                .error(android.R.drawable.stat_notify_error)
-                .fit()
-                .placeholder( R.drawable.progress_animation )
+        if (isService)
+            btnRequestCoupon.setText("Call : " + genericData.getPhone());
+        else
+            btnRequestCoupon.setText(genericData.getOffer_name());
 
-                .into(imageCoupon, new Callback() {
-                    @Override
-                    public void onSuccess() {
 
-                    }
+        btnRequestCoupon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-                    @Override
-                    public void onError() {
 
-                    }
-                });
+                if (isService) {
+                    requestPermissionAndCall();
+                } else {
+                    btnRequestCoupon.setText(genericData.getOffer_name());
+
+
+                    new LovelyStandardDialog(RetailerProfileAndCouponActivity.this)
+                            .setTopColorRes(R.color.holo_blue_dark)
+                            .setButtonsColorRes(R.color.colorAccent)
+                            .setTitle("Confirm")
+                            .setMessage("Do you want to avail this coupon?")
+                            .setPositiveButton(android.R.string.ok, new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    requestCoupon();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, null)
+                            .show();
+
+                }
+            }
+
+        });
+
+
+//        Picasso.with(this.context)
+//                .load(offer_image)
+//                .error(android.R.drawable.stat_notify_error)
+//                .fit()
+//                .placeholder( R.drawable.progress_animation )
+//
+//                .into(imageCoupon, new Callback() {
+//                    @Override
+//                    public void onSuccess() {
+//
+//                    }
+//
+//                    @Override
+//                    public void onError() {
+//
+//                    }
+//                });
+
+
+        slider_banner.addSlider(new TextSliderView(this).image(genericData.getBanner1()));
+        slider_banner.addSlider(new TextSliderView(this).image(genericData.getBanner2()));
+        slider_banner.addSlider(new TextSliderView(this).image(genericData.getBanner3()));
+
 
     }
+
+    void requestPermissionAndCall() {
+
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:" + genericData.getPhone()));
+        startActivity(intent);
+
+    }
+
+
+
 
     void requestCoupon(){
 
 
         Map<String, String> params = new HashMap<String, String>();
-        params.put("id_offer", genericCategoryData.getId().toString());
-        params.put("id_retailer",serviceProviderData.getId().toString());
+        params.put("id_offer", genericData.getId().toString());
+        params.put("id_retailer", genericData.getId().toString());
         params.put("id_user","1");
 
 
